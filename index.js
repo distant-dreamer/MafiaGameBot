@@ -9,7 +9,6 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
 //Enmap
-const Database = require('better-sqlite3');
 const Enmap = require("enmap");
 //const EnmapLevel = require("enmap-level");
 //const EnmapRethink = require('enmap-rethink');
