@@ -8,17 +8,17 @@ module.exports = {
 	description: 'Shows activity analysis',
 	format: "!printactivity",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("That DATA is not for you.")
-			return;
-		}
+		// const gm = client.votes.get("GM");
+		// if (!gm.includes(message.author.id)) {
+		// 	message.channel.send("That DATA is not for you.")
+		// 	return;
+		// }
 
-		keyArray = votes.indexes
-        const activity_array = votes.get("ACTIVITY_DATA");
+		keyArray = client.votes.indexes
+        const activity_array = client.votes.get("ACTIVITY_DATA");
         var total_array = [];
 		var newflag = true;
         var printString  = "__**ACTIVITY_DATA**__\nplayername\tNumber of characters\tNumber of words\tNumber of posts\n";
@@ -62,7 +62,7 @@ module.exports = {
 
   		message.channel.send("Placing into hastebin.");
   		hastebin(printString, "js").then(function(r){
-  			return message.channel.send(r)
+  			return message.channel.send(r).catch(console.log("Uh.....hastebin pooped."))
   		});
 
 

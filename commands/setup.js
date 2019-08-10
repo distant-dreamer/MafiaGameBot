@@ -8,10 +8,10 @@ module.exports = {
 	description: 'Adds a player to the current game',
 	format: "!setup <role>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("I'll setup your ass.")
 			return;
@@ -46,9 +46,9 @@ module.exports = {
 		const playerCount = voteDataArray.length-1;
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
 
-		votes.set("VOTE_DATA", voteDataArray); 
-		votes.set("VOTE_ORDER", []);
-		votes.set("MAJORITY", majority);
+		client.votes.set("VOTE_DATA", voteDataArray); 
+		client.votes.set("VOTE_ORDER", []);
+		client.votes.set("MAJORITY", majority);
 
 		message.channel.send("Game setup for " + playerCount + " players.\n*" + playerString + "*\nDefault majority set to: " + majority);
 		

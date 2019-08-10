@@ -6,9 +6,9 @@ module.exports = {
 	name: 'mod',
 	description: 'Gives a player control over the bot (use for joint moderation or a tech helper)',
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("I'll mod your ass.");
@@ -29,7 +29,7 @@ module.exports = {
 			} 
 
 			gm.push(userid)
-			votes.set("GM", gm); 
+			client.votes.set("GM", gm); 
 			message.channel.send(client.users.get(userid).username + " has been given moderation permissions.");
 			return;
 		}

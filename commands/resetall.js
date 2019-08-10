@@ -7,21 +7,25 @@ module.exports = {
 	description: 'Releases gm control',
 	format: "!resetall",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		votes.fetchEverything();
+		client.votes.fetchEverything();
 
-		const gm = votes.get("GM");
+		///*
+
+		const gm = client.votes.get("GM");
 
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("Only the Gamemaster can use this command.")
 			return;
 		}
 
-		const keys = votes.indexes;
+		//*/
+
+		const keys = client.votes.indexes;
 		for (i in keys) {
-			votes.set(keys[i], undefined);
+			client.votes.set(keys[i], undefined);
 		}
 
 		message.channel.send("All data has been cleared.");

@@ -13,10 +13,11 @@ const Enmap = require("enmap");
 //const EnmapLevel = require("enmap-level");
 //const EnmapRethink = require('enmap-rethink');
 
-const votes = new Enmap({
+client.votes = new Enmap({
 	name: "votes",
 	autoFetch: true,
-	fetchAll: false
+	fetchAll: false,
+	cloneLevel: 'deep'
 });
 //const votes = new Enmap({provider: provider});
 
@@ -39,8 +40,8 @@ client.on('ready', () => {
 
 client.on('message', message => {
 
-	const vaultChannelID = votes.get("VAULT");//Get vault channel;
-	const guildID = votes.get("GUILD_ID");//Get Guild ID
+	const vaultChannelID = client.votes.get("VAULT");//Get vault channel;
+	const guildID = client.votes.get("GUILD_ID");//Get Guild ID
 
 	if (message.author.bot) return; // Ignore bots.
 
@@ -70,16 +71,16 @@ client.on('message', message => {
  				 });
 		}
 		else {
-			message.author.send("The GM needs to set the vault channel.");
+			message.author.send("The GM needs to setup the vault channel.");
 		}
 		return;
 	}
 	//if (message.author.role !== "God") return;
 
-	var jailCellChannelID = votes.get("JAIL_CELL");
-	var jailIntercomChannelID = votes.get("JAIL_INTERCOM");
+	var jailCellChannelID = client.votes.get("JAIL_CELL");
+	var jailIntercomChannelID = client.votes.get("JAIL_INTERCOM");
 
-	const gm = votes.get("GM");
+	const gm = client.votes.get("GM");
 	if (gm != undefined && message.author.id != gm) { //ignore messeges from gm
 		//TO JAILOR
 		if (message.channel.id == jailCellChannelID) {
@@ -126,16 +127,15 @@ client.on('message', message => {
 	*/
 
 
-
 	//CHARACTER COUNT
 
-	var activity_array = votes.get("ACTIVITY_DATA");
+	var activity_array = client.votes.get("ACTIVITY_DATA");
 	if (!activity_array) {
-		votes.set("ACTIVITY_DATA", []);
+		client.votes.set("ACTIVITY_DATA", []);
 	}
 
-	const phase = votes.get("PHASE");
-	const votechannel = votes.get("VOTE_CHANNEL");
+	const phase = client.votes.get("PHASE");
+	const votechannel = client.votes.get("VOTE_CHANNEL");
 	var updateflag = false;
 
 	if (phase && message.channel.id == votechannel ) {
@@ -170,8 +170,82 @@ client.on('message', message => {
 		}
 	}
 
-	votes.set("ACTIVITY_DATA", activity_array);
+	client.votes.set("ACTIVITY_DATA", activity_array);
 
+
+	//SINGUPS--------------------
+
+	
+
+	const signupchannel = client.votes.get("SIGNUPS");
+	const playerMax = 20;
+	//client.votes.set("SIGNUPCOUNT", 4);
+	if (message.channel.id == signupchannel) {
+		console.log(message.author.username + " " + message.content);
+		if (message.author.username[message.author.username.length-1] == message.content[0] && message.content.length == 4){
+			let MafiaRole = message.guild.roles.find(r => r.name === "Mafia Players");
+			let AliveRole = message.guild.roles.find(r => r.name === "Alive");
+			message.member.addRole(MafiaRole).catch(console.error);
+			message.member.addRole(AliveRole).catch(console.error);
+			message.channel.overwritePermissions(message.member, {'SEND_MESSAGES': false} );
+			message.channel.send('`Success. Welcome to Mafia Game #3, ' + message.author.username + "`");
+
+			//List remaining avalibility
+			var signupCount = client.votes.get("SIGNUPCOUNT");
+			if (!signupCount) {
+				signupCount = 1;
+			} else {
+				signupCount += 1;
+			}
+			client.votes.set("SIGNUPCOUNT", signupCount);
+			var remainingSlots = playerMax - signupCount;
+			message.channel.send("Number of signed up players: " + signupCount + "\nRemaining slots: " + remainingSlots);
+
+			//Close channel if all slots filled
+			if (remainingSlots == 0) {
+				message.channel.send("All slots have been filled!");
+				let perms = message.guild.roles.find(r => r.name === "has sign up perms");
+				message.channel.overwritePermissions(perms, {'SEND_MESSAGES': false} );
+			}
+
+			return
+		
+		} else {
+			message.channel.send('`Incorrect input`').then(msg => {msg.delete(5000)}).catch();
+			message.delete();
+			return;
+		}
+	}
+	
+	
+	
+	
+	/*
+
+	
+	//RELEASE THE ZOMBIES (MAFIA #3 ONLY)
+	if (message.content.includes("ET EXSURGE A MORTUIS") && message.channel.id == votechannel) {
+		const Deadrole = message.guild.roles.find(x => x.name == "Dead");
+		message.channel.overwritePermissions(Deadrole, {'SEND_MESSAGES': true} );
+		console.log("ZOMBIES RELEASED");
+	}
+
+	
+
+	
+	//SCOOBS JOJO BATTLE (MAFIA #2.5 ONLY)
+	if (message.content.includes("BREAK YOUR FACE, THAT IS") && (message.channel.id == votechannel) && (message.author.id == 216291435287150592)) {
+		message.channel.send(
+			"**TRUE SCOOBY SNACKS HAS CHALLENGED ANOTHER PLAYER!**\nBoth players now must partake in the following duel of wits:"+
+			"```THE CHALLENGE:\nEach player has two options:\n--------------------------------------\n-----------ATTACK, or SPARE-----------\n--------------------------------------\n\n"+
+			"-If both players ATTACK, both will die.\n\n-If one player SPARES and the other ATTACKS, the sparing player will die.\n\n"+
+			"-If both players SPARE, the challenge will end and no one will die.\n\n"+
+			"-The two players must submit their choice via DM to the GM before the end of the phase. It can be changed at will until the phase is locked. "+
+			"If one player fails to send an action before the end of the phase both players will die.```"
+			)
+	}
+
+	*/
 
 	//commands
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -221,7 +295,7 @@ client.on('message', message => {
 	*/
 
 	try {
-	    command.execute(client, message, args, votes);
+	    command.execute(client, message, args);
 	}
 	catch (error) {
 	    console.error(error);

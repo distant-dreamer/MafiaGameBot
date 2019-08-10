@@ -7,10 +7,10 @@ module.exports = {
 	description: 'Sets the voting channel',
 	format: "!votechannel <channelid>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You leave the designated voting channel alone.")
 			return;
@@ -31,8 +31,8 @@ module.exports = {
 			return;	
 		}
 
-		votes.set("VOTE_CHANNEL", voteChannelID);
-		votes.set("ACTIVITY_DATA", []);
+		client.votes.set("VOTE_CHANNEL", voteChannelID);
+		client.votes.set("ACTIVITY_DATA", []);
 
 		message.channel.send("Voting channel set to: " + voteChannelName);
 	}

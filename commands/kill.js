@@ -8,17 +8,17 @@ module.exports = {
 	description: 'kills a player and resets majority',
 	format: "!kill <player>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("Ah...if it were only that easy.");
 			return;
 		}
 
-		var voteDataArray = votes.get("VOTE_DATA"); //[player, votes, voter]
-		var voteOrderArray = votes.get("VOTE_ORDER");
+		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
+		var voteOrderArray = client.votes.get("VOTE_ORDER");
 
 		if (voteDataArray == undefined) {
 			message.channel.send("You don't have any players to kill! Setup the game first.");
@@ -61,9 +61,9 @@ module.exports = {
 		const playerCount = voteDataArray.length-1;
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
 
-		votes.set("VOTE_DATA", voteDataArray); 
-		votes.set("VOTE_ORDER", voteOrderArray); 
-		votes.set("MAJORITY", majority);
+		client.votes.set("VOTE_DATA", voteDataArray); 
+		client.votes.set("VOTE_ORDER", voteOrderArray); 
+		client.votes.set("MAJORITY", majority);
 
 		var playerStrings = playerArray.toString().replace(/,/g, "\n");
 

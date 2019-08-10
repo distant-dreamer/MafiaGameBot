@@ -7,11 +7,11 @@ module.exports = {
 	description: 'Votes for a player',
     format: "!vote <player>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
         //Check if it's day
         
-        const gm = votes.get("GM");
-        var phaseType = votes.get("PHASE"); //[phaseType, phaseNum]
+        const gm = client.votes.get("GM");
+        var phaseType = client.votes.get("PHASE"); //[phaseType, phaseNum]
         
 
         if (gm == undefined) {
@@ -20,13 +20,13 @@ module.exports = {
             return;
         }
 
-        var voteDataArray = votes.get("VOTE_DATA"); //array of: [player, votes, voted]
+        var voteDataArray = client.votes.get("VOTE_DATA"); //array of: [player, votes, voted]
         if (voteDataArray == undefined) {
             message.channel.send("<@" + gm[0] + "> needs to get their shit together and setup the game.");
             return;
         }
 
-        const voteChannelID = votes.get("VOTE_CHANNEL");
+        const voteChannelID = client.votes.get("VOTE_CHANNEL");
         if (voteChannelID == undefined) {
             message.channel.send("<@" + gm[0] + "> needs to set the voting channel!");
             return;
@@ -44,7 +44,7 @@ module.exports = {
         }
 
         if (phaseType[0] == "NIGHT") {
-            message.channel.send("It's night time. Stop trying to vote and go to bed.");
+            message.channel.send("JESUS LOVES YOU.");
             return;
         }
 
@@ -56,10 +56,10 @@ module.exports = {
     	//Put arguments into string
 
     	var votedPlayer = message.content.replace(prefix+"vote ", ""); //remove "!vote"
-    	var voteOrderArray = votes.get("VOTE_ORDER");//array of ordered voted players 
-        const majority = votes.get("MAJORITY"); //Majority
-        const logChannelID = votes.get("LOG"); //Log
-        var hammerReached = votes.get("HAMMER"); //Vote Hammer/majority
+    	var voteOrderArray = client.votes.get("VOTE_ORDER");//array of ordered voted players 
+        const majority = client.votes.get("MAJORITY"); //Majority
+        const logChannelID = client.votes.get("LOG"); //Log
+        var hammerReached = client.votes.get("HAMMER"); //Vote Hammer/majority
     	var inputMatch = false;
         phaseType = phaseType[0];
 
@@ -204,13 +204,25 @@ module.exports = {
                 //const hammer = client.emojis.find("name", "hammer");
                 client.channels.get(logChannelID).send("🔨🔨🔨🔨🔨🔨🔨"); //Posts hammers
                 hammerReached = true;
+
+                //Lock Hammered out of chat
+                try{
+                	message.channel.overwritePermissions(votedPlayerObject, {'SEND_MESSAGES': false} );
+                	message.channel.send("*" + votedPlayer + " has been locked out of " + message.channel.name + " and can no loger post in this channel.*");
+                }
+                catch(error) {
+                	message.channel.send("Attempt to lock hammered player out of chat falied. Just don't talk here anymore, ok " + votedPlayer + "?");
+                }
+
+
+
             }
         }
   
 		//set data
-		votes.set("VOTE_DATA", voteDataArray);
-		votes.set("VOTE_ORDER", voteOrderArray);
-        votes.set("HAMMER", hammerReached);
+		client.votes.set("VOTE_DATA", voteDataArray);
+		client.votes.set("VOTE_ORDER", voteOrderArray);
+        client.votes.set("HAMMER", hammerReached);
 
 
 

@@ -8,17 +8,17 @@ module.exports = {
 	description: 'Shows internal data',
 	format: "!printdata",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("The DATA is not for you.")
 			return;
 		}
 
-		keyArray = votes.indexes
-        const dataMap = votes.fetch(keyArray);
+		keyArray = client.votes.indexes
+        const dataMap = client.votes.fetch(keyArray);
         var printString = "-----ALL DATA-----\n" + dataMap.map((v, k) => ("**" + k + "** => " + v)).join("\n");
 
 

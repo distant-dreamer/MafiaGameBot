@@ -6,13 +6,13 @@ module.exports = {
 	description: 'Removes vote from player',
     format: "!unvote <player>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
-        var phaseType = votes.get("PHASE"); //[phaseType, phaseNum]
-    	var voteDataArray = votes.get("VOTE_DATA"); //array of: [player, votes, voted]
-    	var voteOrderArray = votes.get("VOTE_ORDER");//array of ordered voted players
-    	const logChannelID = votes.get("LOG"); //Log channel
-    	const gm = votes.get("GM"); //game master id
+        var phaseType = client.votes.get("PHASE"); //[phaseType, phaseNum]
+    	var voteDataArray = client.votes.get("VOTE_DATA"); //array of: [player, votes, voted]
+    	var voteOrderArray = client.votes.get("VOTE_ORDER");//array of ordered voted players
+    	const logChannelID = client.votes.get("LOG"); //Log channel
+    	const gm = client.votes.get("GM"); //game master id
 
         if (gm == undefined) {
             //CHANGE THIS IF THERE'S A DIFFERENT GM
@@ -20,7 +20,7 @@ module.exports = {
             return;
         }
 
-        const voteChannelID = votes.get("VOTE_CHANNEL");
+        const voteChannelID = client.votes.get("VOTE_CHANNEL");
         if (voteChannelID == undefined) {
             message.channel.send("<@" + gm + "> needs to set the voting channel!");
             return;
@@ -136,7 +136,7 @@ module.exports = {
         }
 
 		//set data
-		votes.set("VOTE_DATA", voteDataArray);
-		votes.set("VOTE_ORDER", voteOrderArray);
+		client.votes.set("VOTE_DATA", voteDataArray);
+		client.votes.set("VOTE_ORDER", voteOrderArray);
 	},
 };

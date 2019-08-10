@@ -6,17 +6,17 @@ module.exports = {
 	name: 'vault',
 	description: 'Sets the secretvault channel',
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You leave the vault channel alone.")
 			return;
 		}
 
 		const vaultChannelID = args[0];
-		votes.set("VAULT", vaultChannelID);
+		client.votes.set("VAULT", vaultChannelID);
 
 		const vaultChannelName = client.channels.get(vaultChannelID).toString();
 

@@ -8,11 +8,11 @@ module.exports = {
 	description: 'Sets the secretvault channel',
 	format: "!objection",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 
 		//Check that the GM is giving command.
-		const aamode = votes.get("AAMODE");
+		const aamode = client.votes.get("AAMODE");
 		if (!aamode) {
 			message.channel.send("Invalid input.")
 			return;

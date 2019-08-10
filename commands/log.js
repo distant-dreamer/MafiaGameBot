@@ -7,17 +7,17 @@ module.exports = {
 	description: 'Sets the log channel',
 	format: '!log <channelid>',
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You leave the designated log channel alone.")
 			return;
 		}
 
 		const logChannelID = args[0];
-		votes.set("LOG", logChannelID);
+		client.votes.set("LOG", logChannelID);
 
 		const logChannelName = client.channels.get(logChannelID).toString();
 

@@ -10,13 +10,13 @@ module.exports = {
 
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (message.author.id != gm) {
 			message.channel.send("Nope.")
 			return;
 		}
 		
-		var aamode = votes.get("AAMODE");
+		var aamode = client.votes.get("AAMODE");
 
 		switch (args[0]) {
 			case "on":
@@ -37,7 +37,7 @@ module.exports = {
 				break;
 		}
 
-		votes.set("AAMODE", aamode);
+		client.votes.set("AAMODE", aamode);
 		
 	}
 };

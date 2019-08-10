@@ -8,11 +8,11 @@ module.exports = {
 	description: 'adds a player to the playerlist',
 	format: "!unkill <player>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
-		var voteDataArray = votes.get("VOTE_DATA"); //[player, votes, voter]
+		const gm = client.votes.get("GM");
+		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
 
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You do not have the power over life and death, simpleton.");
@@ -41,8 +41,8 @@ module.exports = {
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
 
 		
-		votes.set("VOTE_DATA", voteDataArray); 
-		votes.set("MAJORITY", majority);
+		client.votes.set("VOTE_DATA", voteDataArray); 
+		client.votes.set("MAJORITY", majority);
 
 		var playerStrings = playerArray.toString().replace(/,/g, "\n");
 

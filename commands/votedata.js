@@ -7,16 +7,16 @@ module.exports = {
 	description: 'adds a player to the playerlist',
 	format: "!votedata",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You don't get to have that **DATA**.");
 			return;
 		}
 
-		var voteDataArray = votes.get("VOTE_DATA"); //[player, votes, [voters]]
+		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, [voters]]
 
 		//Iterate though data and post voters
 		var voteDataString = "-----VOTE DATA-----\n";
@@ -39,7 +39,7 @@ module.exports = {
 			}
 		}
 
-		votes.set("VOTE_DATA", voteDataArray); 
+		client.votes.set("VOTE_DATA", voteDataArray); 
 		
 		message.channel.send(voteDataString);
 	}

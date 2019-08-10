@@ -7,10 +7,10 @@ module.exports = {
 	description: 'clears vote count. Argument sets majority',
 	format: "!newphase <day/night> <phase#>",
 	guildonly: true,
-	execute(client, message, args, votes) {
+	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = votes.get("GM");
+		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You don't get to start the phase, buddy.")
 			return;
@@ -19,9 +19,9 @@ module.exports = {
 			message.channel.send("Are you the gm? Run !gm first.");
 			return;
 		}
-		var voteDataArray = votes.get("VOTE_DATA"); //[player, votes, voter]
-		var voteOrderArray = votes.get("VOTE_ORDER");
-		const logChannelID = votes.get("LOG"); //Log
+		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
+		var voteOrderArray = client.votes.get("VOTE_ORDER");
+		const logChannelID = client.votes.get("LOG"); //Log
 		var phaseType = args[0].toUpperCase();; //Day or night
 		var phaseNum = Number(args[1]); //Phase count
 
@@ -76,10 +76,10 @@ module.exports = {
 		}
 
 		//Majority
-	    votes.set("VOTE_DATA", voteDataArray); 
-	    votes.set("VOTE_ORDER", voteOrderArray);
-		votes.set("MAJORITY", majority);
-		votes.set("PHASE", [phaseType, phaseNum]);
-		votes.set("HAMMER", false);
+	    client.votes.set("VOTE_DATA", voteDataArray); 
+	    client.votes.set("VOTE_ORDER", voteOrderArray);
+		client.votes.set("MAJORITY", majority);
+		client.votes.set("PHASE", [phaseType, phaseNum]);
+		client.votes.set("HAMMER", false);
 	}
 };
