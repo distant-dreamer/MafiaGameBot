@@ -64,21 +64,19 @@ module.exports = {
 
 		message.channel.send("Making file...");
 
-		fs.writeFile(gm.username + "_" + String(printString.length) + ".txt", printString, (err) => {
-			// throws an error, you could also catch it here
-			if (err) throw err;
+		var user = client.fetchUser(gm[0]).then(user => {
+			const gm_username = user.username;
 
-			// success case, the file was saved
-			message.channel.send("File made!");
+			fs.writeFile("MafiaStats_" + gm_username + "_" + String(printString.length) + ".txt", printString, (err) => {
+				// throws an error, you could also catch it here
+				if (err) throw err;
+
+				// success case, the file was saved
+				message.channel.send("File made!");
+			});
+
 		});
-
-
 		
-
-
-
-
-		printString
 
 
 

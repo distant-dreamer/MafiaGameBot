@@ -1,0 +1,303 @@
+__**ACTIVITY_DATA**__
+playername	Number of characters	Number of words	Number of posts
+**------------------------DAY 3------------------------**
+Captain Thomas💙	5866	1081	128
+MoreGooder	965	182	47
+Mac	72	17	7
+Pablo Smith	4856	959	143
+TehFriedWaffles	1364	268	36
+ThePopStarDude	2924	571	83
+Dirty Spaceman	10428	2044	209
+ZelRaat	9089	2037	285
+LordGingerman	4409	858	82
+Elecmarol	179	40	9
+Louie25	2455	468	81
+Lightning	1416	292	51
+True Scooby Snacks	5320	979	101
+Snowva	673	128	15
+Zoom Guy	929	178	25
+pizzagal	675	139	16
+KnightSpecter	1160	217	37
+Smittz	169	33	8
+Aytoms	2822	594	137
+Malleable	756	148	12
+**------------------------NIGHT 0------------------------**
+MoreGooder	420	62	23
+monrebentibus	2	1	1
+Cameron	164	33	6
+Captain Thomas💙	288	34	13
+Maurj	311	50	13
+~ ☽ ~	6	2	2
+Pablo Smith	264	48	7
+TheFloorIsEvil	124	22	5
+Snowva	2	1	1
+Louie25	0	1	1
+Mac	41	5	5
+Malleable	2	1	1
+TehFriedWaffles	146	32	8
+ThePopStarDude	183	38	6
+KnightSpecter	49	9	3
+Dirty Spaceman	2	1	1
+ZelRaat	2	1	1
+LordGingerman	47	10	1
+messenger	80	10	3
+Aytoms	7	2	1
+Zoom Guy	23	4	2
+**------------------------DAY 1------------------------**
+MoreGooder	1934	380	68
+pizzagal	461	93	21
+Captain Thomas💙	4034	773	145
+Snowva	2540	485	59
+True Scooby Snacks	3218	608	125
+TehFriedWaffles	994	192	43
+~ ☽ ~	974	184	38
+Zoom Guy	13067	2543	344
+Cameron	2876	566	69
+TheFloorIsEvil	1571	322	46
+Pablo Smith	6595	1294	176
+monrebentibus	2578	476	46
+Mac	1447	288	71
+Aytoms	1431	301	78
+KnightSpecter	2415	479	86
+LordGingerman	2520	506	75
+messenger	1549	313	35
+Maurj	9138	1591	150
+Big Bug	66	11	1
+Ahmaykmewsik	41	7	3
+ThePopStarDude	2861	579	72
+Elecmarol	293	67	13
+Malleable	276	52	6
+ZelRaat	4090	777	109
+Louie25	3395	664	113
+**------------------------NIGHT 1------------------------**
+MoreGooder	676	142	36
+Pablo Smith	218	42	8
+Maurj	356	78	13
+Captain Thomas💙	197	39	15
+True Scooby Snacks	63	15	5
+Zoom Guy	13	3	1
+KnightSpecter	28	6	4
+Louie25	397	80	12
+Aytoms	80	17	6
+ThePopStarDude	132	25	3
+Snowva	407	72	12
+ZelRaat	462	84	19
+TehFriedWaffles	71	13	2
+Mac	26	5	1
+**------------------------DAY 2------------------------**
+MoreGooder	2644	426	88
+Snowva	3160	623	60
+Dirty Spaceman	8833	1671	151
+Elecmarol	116	24	9
+Louie25	4394	855	144
+Captain Thomas💙	5674	1064	171
+pizzagal	429	77	15
+Lightning	2021	435	75
+TheFloorIsEvil	800	154	24
+Cameron	1800	341	37
+ZelRaat	2231	453	75
+LordGingerman	5346	1039	136
+TehFriedWaffles	1254	253	37
+Pablo Smith	3475	701	124
+Mac	437	98	28
+Big Bug	0	1	1
+KnightSpecter	3726	694	68
+Zoom Guy	2933	571	76
+True Scooby Snacks	4547	891	142
+monrebentibus	6446	1239	92
+ThePopStarDude	1358	264	34
+Malleable	1061	212	29
+**------------------------NIGHT 2------------------------**
+MoreGooder	89	18	8
+Louie25	253	48	7
+Zoom Guy	108	22	5
+True Scooby Snacks	490	102	18
+Cameron	267	57	13
+Pablo Smith	119	24	7
+Dirty Spaceman	387	60	11
+Captain Thomas💙	227	34	9
+ZelRaat	47	11	4
+TehFriedWaffles	17	5	2
+Ahmaykmewsik	36	8	1
+Mac	2	1	1
+Lightning	30	6	2
+LordGingerman	0	1	1
+**------------------------NIGHT 3------------------------**
+MoreGooder	242	54	12
+ZelRaat	573	107	17
+LordGingerman	138	28	8
+Pablo Smith	252	52	10
+Dirty Spaceman	508	96	8
+Louie25	63	12	2
+True Scooby Snacks	532	109	16
+TehFriedWaffles	17	4	3
+Mac	2	1	1
+ThePopStarDude	491	97	11
+Zoom Guy	81	18	2
+KnightSpecter	42	9	1
+Snowva	222	43	6
+Smittz	35	7	1
+**------------------------DAY 4------------------------**
+MoreGooder	375	77	14
+ZelRaat	1990	381	62
+True Scooby Snacks	5361	1057	171
+Pablo Smith	3698	727	112
+Aytoms	2265	448	119
+monrebentibus	1696	322	49
+TehFriedWaffles	620	129	33
+Zoom Guy	4792	971	146
+Louie25	1559	305	41
+Snowva	594	109	14
+Elecmarol	18	4	2
+Mac	433	92	26
+KnightSpecter	914	173	24
+Smittz	139	28	6
+Dirty Spaceman	1602	324	36
+Lightning	156	37	12
+Big Bug	268	40	2
+Ahmaykmewsik	117	25	6
+Malleable	136	26	4
+**------------------------NIGHT 4------------------------**
+MoreGooder	1142	225	44
+Zoom Guy	1120	184	18
+TehFriedWaffles	799	168	30
+Malleable	158	32	4
+Pablo Smith	1497	294	32
+Dirty Spaceman	302	60	9
+Smittz	136	22	7
+monrebentibus	367	69	8
+Mac	10	3	2
+True Scooby Snacks	293	58	9
+Louie25	315	66	8
+Aytoms	260	42	10
+Snowva	387	77	12
+KnightSpecter	223	40	5
+ZelRaat	197	41	9
+**------------------------DAY 5------------------------**
+MoreGooder	1404	236	68
+Lightning	1036	177	45
+Pablo Smith	3666	734	104
+ZelRaat	5404	1023	131
+True Scooby Snacks	4066	810	123
+KnightSpecter	2459	482	80
+TehFriedWaffles	3172	650	102
+Louie25	1896	359	56
+LordGingerman	7077	1437	231
+Aytoms	1956	395	86
+Big Bug	87	15	1
+monrebentibus	7435	1510	155
+Zoom Guy	101	18	3
+Smittz	935	190	39
+Snowva	7428	1444	147
+Malleable	794	151	33
+Elecmarol	412	82	10
+Dirty Spaceman	131	23	5
+Ahmaykmewsik	58	12	2
+**------------------------NIGHT 5------------------------**
+MoreGooder	86	19	7
+Zoom Guy	191	41	10
+Snowva	71	15	3
+monrebentibus	13	2	1
+Smittz	155	34	15
+LordGingerman	348	79	15
+True Scooby Snacks	648	130	20
+Pablo Smith	900	170	25
+ZelRaat	66	15	2
+Aytoms	24	5	1
+KnightSpecter	466	93	16
+**------------------------DAY 6------------------------**
+MoreGooder	220	47	10
+Elecmarol	177	36	6
+KnightSpecter	1923	371	53
+Pablo Smith	6709	1310	159
+Lightning	183	41	6
+Snowva	1378	274	30
+monrebentibus	1266	251	23
+LordGingerman	630	124	34
+Smittz	109	23	5
+Zoom Guy	2017	391	76
+Aytoms	1510	307	64
+Dirty Spaceman	1127	213	16
+ZelRaat	506	101	25
+Ahmaykmewsik	65	10	1
+**------------------------NIGHT 6------------------------**
+MoreGooder	114	23	9
+Snowva	594	117	18
+LordGingerman	564	119	24
+monrebentibus	520	102	7
+ZelRaat	75	14	4
+Pablo Smith	209	43	8
+Smittz	30	7	2
+Dirty Spaceman	231	44	5
+Zoom Guy	2	1	1
+Malleable	63	12	1
+**------------------------DAY 7------------------------**
+MoreGooder	364	80	19
+Zoom Guy	2145	423	62
+True Scooby Snacks	5921	1122	125
+monrebentibus	5318	1003	101
+Pablo Smith	2590	516	84
+LordGingerman	2718	542	74
+ZelRaat	5042	982	144
+Aytoms	647	134	26
+Big Bug	109	19	1
+Malleable	1962	387	66
+Dirty Spaceman	1142	227	20
+Elecmarol	119	24	3
+**------------------------NIGHT 7------------------------**
+MoreGooder	114	25	8
+Zoom Guy	34	6	2
+LordGingerman	1019	214	34
+ZelRaat	307	58	12
+True Scooby Snacks	858	168	19
+monrebentibus	193	40	8
+Pablo Smith	224	49	9
+Aytoms	41	7	2
+**------------------------DAY 8------------------------**
+MoreGooder	298	57	19
+Zoom Guy	1554	300	41
+True Scooby Snacks	1459	291	61
+LordGingerman	5867	1173	210
+Aytoms	3610	553	110
+ZelRaat	2462	482	60
+Dirty Spaceman	1690	294	39
+Lightning	2174	448	49
+monrebentibus	1432	293	24
+Elecmarol	9	2	1
+**------------------------DAY 9------------------------**
+MoreGooder	657	34	4
+Dirty Spaceman	559	121	16
+LordGingerman	417	93	22
+True Scooby Snacks	537	103	23
+Aytoms	190	36	9
+Pablo Smith	1374	263	36
+Zoom Guy	343	68	15
+**------------------------TOTAL------------------------**
+Captain Thomas💙	16286	3025	481
+MoreGooder	11744	2087	484
+Mac	2470	510	142
+Pablo Smith	36646	7226	1044
+TehFriedWaffles	8454	1714	296
+ThePopStarDude	7949	1574	209
+Dirty Spaceman	26942	5178	526
+ZelRaat	32543	6567	959
+LordGingerman	31100	6223	947
+Elecmarol	1323	279	53
+Louie25	14727	2858	465
+Lightning	7016	1436	240
+True Scooby Snacks	33313	6443	958
+Snowva	17456	3388	377
+Zoom Guy	29453	5742	829
+pizzagal	1565	309	52
+KnightSpecter	13405	2573	377
+Smittz	1708	344	83
+Aytoms	14843	2841	649
+Malleable	5208	1021	156
+monrebentibus	27266	5308	515
+Cameron	5107	997	125
+Maurj	9805	1719	176
+~ ☽ ~	980	186	40
+TheFloorIsEvil	2495	498	75
+messenger	1629	323	38
+Big Bug	530	86	6
+Ahmaykmewsik	317	62	13

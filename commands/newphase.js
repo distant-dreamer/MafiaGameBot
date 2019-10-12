@@ -81,5 +81,6 @@ module.exports = {
 		client.votes.set("MAJORITY", majority);
 		client.votes.set("PHASE", [phaseType, phaseNum]);
 		client.votes.set("HAMMER", false);
+		client.votes.set("DMLIST", []);
 	}
 };
