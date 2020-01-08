@@ -1,0 +1,109 @@
+__**ACTIVITY_DATA**__
+playername	Number of characters	Number of words	Number of posts
+**------------------------NIGHT 0------------------------**
+Ahmaykmewsik	188	40	13
+ZelRaat	417	88	32
+Pablo Smith	779	156	35
+Captain Thomas💙	159	26	9
+True Scooby Snacks	471	107	28
+monrebentibus	703	101	24
+MoreGooder	466	110	32
+Maack	301	43	14
+TehFriedWaffles	188	41	14
+ThePopStarDude	502	103	15
+LordGingerman	284	51	12
+Cameron	555	109	22
+pizzagal	230	47	6
+**------------------------DAY 1------------------------**
+Ahmaykmewsik	401	88	27
+MoreGooder	858	181	41
+ZelRaat	1481	264	77
+pizzagal	382	75	20
+monrebentibus	483	100	29
+Pablo Smith	2686	566	97
+Cameron	1422	290	51
+Maack	1191	243	42
+ThePopStarDude	1751	358	67
+TehFriedWaffles	367	85	30
+Captain Thomas💙	1173	227	51
+True Scooby Snacks	1261	260	63
+LordGingerman	865	133	37
+**------------------------NIGHT 1------------------------**
+Ahmaykmewsik	279	56	16
+Captain Thomas💙	1601	279	37
+ZelRaat	1442	275	59
+Maack	348	74	21
+pizzagal	323	72	17
+True Scooby Snacks	1082	222	47
+ThePopStarDude	2264	428	61
+TehFriedWaffles	56	14	10
+Cameron	1857	332	35
+monrebentibus	295	61	11
+MoreGooder	74	16	4
+Pablo Smith	538	117	16
+LordGingerman	363	56	14
+**------------------------DAY 2------------------------**
+LordGingerman	1359	278	54
+True Scooby Snacks	1470	307	72
+Captain Thomas💙	3963	764	99
+ZelRaat	2875	599	151
+Cameron	3293	635	79
+monrebentibus	1399	282	52
+TehFriedWaffles	628	118	27
+Ahmaykmewsik	520	103	32
+ThePopStarDude	3928	761	97
+MoreGooder	1602	313	49
+pizzagal	1349	287	60
+Pablo Smith	3044	628	89
+Maack	239	52	15
+**------------------------NIGHT 2------------------------**
+Ahmaykmewsik	34	7	4
+ZelRaat	868	179	46
+TehFriedWaffles	109	16	6
+True Scooby Snacks	248	54	12
+Cameron	616	115	17
+MoreGooder	157	28	8
+pizzagal	293	63	13
+ThePopStarDude	1762	341	52
+Captain Thomas💙	253	49	9
+LordGingerman	181	41	5
+monrebentibus	241	50	6
+Maack	16	4	3
+**------------------------DAY 3------------------------**
+Ahmaykmewsik	417	96	30
+Captain Thomas💙	1355	250	44
+MoreGooder	1606	334	66
+ThePopStarDude	2787	545	93
+LordGingerman	4135	730	86
+TehFriedWaffles	542	111	35
+True Scooby Snacks	1972	399	95
+ZelRaat	2473	507	115
+Cameron	2722	536	82
+pizzagal	455	96	26
+Superb	719	140	23
+**------------------------DAY 4------------------------**
+Ahmaykmewsik	473	101	30
+ZelRaat	2403	478	113
+ThePopStarDude	1668	342	64
+Superb	1757	321	35
+Captain Thomas💙	702	149	39
+pizzagal	1108	217	50
+True Scooby Snacks	1037	220	54
+LordGingerman	1146	232	44
+TehFriedWaffles	323	69	19
+MoreGooder	3436	599	51
+**------------------------TOTAL------------------------**
+Ahmaykmewsik	2312	491	152
+ZelRaat	11959	2390	593
+Pablo Smith	7047	1467	237
+Captain Thomas💙	9206	1744	288
+True Scooby Snacks	7541	1569	371
+monrebentibus	3121	594	122
+MoreGooder	8199	1581	251
+Maack	2095	416	95
+TehFriedWaffles	2213	454	141
+ThePopStarDude	14662	2878	449
+LordGingerman	8333	1521	252
+Cameron	10465	2017	286
+pizzagal	4140	857	192
+Superb	2476	461	58

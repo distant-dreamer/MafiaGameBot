@@ -1,0 +1,250 @@
+__**ACTIVITY_DATA**__
+playername	Number of characters	Number of words	Number of posts
+**------------------------NIGHT 0------------------------**
+Zoom Guy	1187	223	49
+ThePopStarDude	580	119	28
+Captain Thomas💙	72	17	4
+Cameron	110	23	6
+Pablo Smith	848	146	25
+TehFriedWaffles	56	12	7
+Glacier	271	44	13
+Superb	553	109	21
+Zaylok	62	14	3
+Bum Soldier	447	92	17
+Ahmaykmewsik	823	159	25
+TheFloorIsEvil	227	46	10
+404	171	35	8
+Maurj	140	30	4
+ZelRaat	380	61	14
+True Scooby Snacks	278	54	10
+MoreGooder	139	26	5
+KnightSpecter	132	26	3
+Dirty Spaceman	595	107	22
+Maack	162	18	10
+SUPAHSTAR CLOD	703	141	13
+Snowva	112	24	4
+Aytoms	11	2	1
+**------------------------DAY 1------------------------**
+Zoom Guy	2791	530	74
+Superb	4854	946	144
+Glacier	5790	1150	189
+ZelRaat	15184	3002	410
+Snowva	4201	827	75
+Louie25	343	64	14
+TehFriedWaffles	597	114	31
+Maack	329	67	19
+Captain Thomas💙	708	152	35
+Bum Soldier	3224	677	128
+True Scooby Snacks	1925	397	73
+404	136	27	8
+ThePopStarDude	2056	417	71
+Pablo Smith	2134	423	55
+Dirty Spaceman	2852	561	59
+Ahmaykmewsik	3885	738	114
+TheFloorIsEvil	329	59	12
+MoreGooder	1989	415	59
+monrebentibus	744	150	20
+Cameron	165	33	4
+KnightSpecter	79	17	5
+Aytoms	4832	893	156
+Zaylok	75	18	3
+**------------------------NIGHT 1------------------------**
+Aytoms	572	115	19
+True Scooby Snacks	454	104	19
+Glacier	556	114	14
+Zoom Guy	751	149	31
+Superb	473	100	16
+Captain Thomas💙	644	128	27
+Snowva	741	145	18
+Pablo Smith	2280	435	51
+Ahmaykmewsik	417	83	6
+KnightSpecter	335	66	11
+Dirty Spaceman	307	54	7
+Maack	128	23	9
+TehFriedWaffles	212	41	7
+404	198	33	6
+TheFloorIsEvil	1013	197	34
+MoreGooder	112	22	4
+Bum Soldier	264	52	9
+Cameron	502	100	9
+monrebentibus	383	73	10
+ThePopStarDude	287	61	6
+SUPAHSTAR CLOD	578	121	18
+**------------------------DAY 2------------------------**
+Zoom Guy	2135	411	83
+Snowva	8773	1706	128
+Aytoms	3959	835	202
+Maack	418	90	18
+Glacier	2235	433	57
+Superb	7160	1390	125
+TehFriedWaffles	645	133	19
+Ahmaykmewsik	5781	1121	188
+Captain Thomas💙	1301	246	29
+ThePopStarDude	3447	673	78
+Maurj	3769	719	42
+Pablo Smith	7843	1566	173
+True Scooby Snacks	511	111	24
+monrebentibus	2816	564	45
+MoreGooder	1929	393	45
+Bum Soldier	4956	1003	167
+Cameron	1195	229	27
+SUPAHSTAR CLOD	4894	983	136
+TheFloorIsEvil	450	88	18
+404	2207	409	58
+Zaylok	355	67	8
+KnightSpecter	1416	274	45
+Dirty Spaceman	1700	312	20
+**------------------------NIGHT 2------------------------**
+Zoom Guy	196	35	12
+Snowva	98	20	4
+Maurj	282	52	6
+Captain Thomas💙	5	1	1
+ThePopStarDude	363	69	11
+MoreGooder	145	27	6
+True Scooby Snacks	23	5	2
+Cameron	95	17	2
+404	43	9	4
+Ahmaykmewsik	8	3	3
+Louie25	279	56	6
+Zaylok	0	1	1
+Pablo Smith	1177	228	35
+KnightSpecter	643	123	16
+SUPAHSTAR CLOD	569	104	15
+Dirty Spaceman	2295	456	40
+TheFloorIsEvil	12	2	1
+Kris Pringle	148	32	5
+Aytoms	335	69	11
+Maack	145	18	4
+TehFriedWaffles	185	39	5
+Bum Soldier	126	25	5
+Glacier	2	1	1
+**------------------------DAY 3------------------------**
+Aytoms	3719	718	230
+Cameron	835	160	20
+TehFriedWaffles	395	80	13
+Glacier	3783	682	101
+Pablo Smith	5016	1003	127
+Louie25	530	103	22
+TheFloorIsEvil	1467	298	47
+Kris Pringle	100	22	5
+monrebentibus	1234	241	24
+Dirty Spaceman	12239	2437	283
+Bum Soldier	4382	920	163
+Captain Thomas	895	174	47
+Snowva	4822	916	76
+Maack	413	77	18
+Zoom Guy	1174	231	47
+MoreGooder	5387	1103	168
+SUPAHSTAR CLOD	5568	1102	169
+Maurj	2080	385	53
+Ahmaykmewsik	5807	1137	212
+404	1070	218	38
+Zaylok	626	123	10
+ThePopStarDude	3223	632	84
+Captain Thomas💙	1363	284	41
+True Scooby Snacks	344	76	9
+**------------------------NIGHT 3------------------------**
+Zoom Guy	2058	426	82
+Maurj	1145	226	37
+MoreGooder	386	71	13
+Captain Thomas💙	161	36	7
+Snowva	396	87	12
+TheFloorIsEvil	947	202	25
+Aytoms	1498	290	59
+Dirty Spaceman	968	198	28
+Pablo Smith	1248	257	28
+Ahmaykmewsik	456	94	16
+SUPAHSTAR CLOD	644	118	17
+Louie25	171	30	6
+Zaylok	187	42	6
+True Scooby Snacks	35	7	2
+TehFriedWaffles	117	22	7
+Cameron	399	82	9
+ThePopStarDude	335	60	7
+**------------------------DAY 4------------------------**
+Zoom Guy	629	131	33
+Bum Soldier	893	202	42
+SUPAHSTAR CLOD	296	59	9
+Pablo Smith	2367	332	47
+Cameron	164	42	7
+ThePopStarDude	1794	375	65
+Dirty Spaceman	4650	922	100
+monrebentibus	401	67	11
+Zaylok	351	79	9
+TehFriedWaffles	607	115	18
+Captain Thomas💙	45	9	3
+TheFloorIsEvil	668	133	12
+Aytoms	460	85	18
+MoreGooder	2248	441	68
+404	2402	488	37
+Snowva	3130	613	48
+True Scooby Snacks	273	56	12
+Maurj	658	136	19
+Maack	81	15	5
+Louie25	167	30	5
+deogenerate	191	40	3
+**------------------------DAY 5------------------------**
+Zoom Guy	259	55	10
+TehFriedWaffles	60	13	4
+Dirty Spaceman	2085	410	46
+KnightSpecter	285	57	11
+Maack	65	15	7
+Cameron	20	5	2
+MoreGooder	677	142	23
+Zaylok	198	37	6
+ThePopStarDude	213	45	10
+monrebentibus	2376	463	43
+Bum Soldier	563	121	24
+Snowva	60	13	2
+**------------------------NIGHT 5------------------------**
+Zoom Guy	294	61	13
+Bum Soldier	49	13	8
+MoreGooder	99	25	8
+Dirty Spaceman	796	166	31
+monrebentibus	82	19	6
+Maurj	554	108	13
+KnightSpecter	124	23	4
+Cameron	16	5	1
+Zaylok	62	15	2
+deogenerate	38	10	3
+Maack	22	4	1
+TehFriedWaffles	58	14	4
+ThePopStarDude	182	37	8
+Aytoms	59	4	2
+Louie25	32	3	1
+SUPAHSTAR CLOD	2103	351	14
+**------------------------DAY 6------------------------**
+Zoom Guy	138	30	5
+SUPAHSTAR CLOD	523	99	12
+Maurj	516	99	18
+Louie25	197	37	7
+Cameron	25	6	2
+**------------------------TOTAL------------------------**
+Zoom Guy	11612	2282	439
+ThePopStarDude	12480	2488	368
+Captain Thomas💙	4299	873	147
+Cameron	3526	702	89
+Pablo Smith	22913	4390	541
+TehFriedWaffles	2932	583	115
+Glacier	12637	2424	375
+Superb	13040	2545	306
+Zaylok	1916	396	48
+Bum Soldier	14904	3105	563
+Ahmaykmewsik	17177	3335	564
+TheFloorIsEvil	5113	1025	159
+404	6227	1219	159
+Maurj	9144	1755	192
+ZelRaat	15564	3063	424
+True Scooby Snacks	3843	810	151
+MoreGooder	13111	2665	399
+KnightSpecter	3014	586	95
+Dirty Spaceman	28487	5623	636
+Maack	1763	327	91
+SUPAHSTAR CLOD	15878	3078	403
+Snowva	22333	4351	367
+Aytoms	15445	3011	698
+Louie25	1719	323	61
+monrebentibus	8036	1577	159
+Kris Pringle	248	54	10
+Captain Thomas	895	174	47
+deogenerate	229	50	6

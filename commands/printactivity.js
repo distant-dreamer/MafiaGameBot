@@ -1,6 +1,5 @@
 
 const Enmap = require("enmap");
-const EnmapLevel = require("enmap-level");
 const fs = require('fs');
 
 module.exports = {

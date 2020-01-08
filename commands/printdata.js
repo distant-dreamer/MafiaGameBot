@@ -1,7 +1,5 @@
 
 const Enmap = require("enmap");
-const EnmapLevel = require("enmap-level");
-const hastebin = require('hastebin-gen');
 
 module.exports = {
 	name: 'printdata',

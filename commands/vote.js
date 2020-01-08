@@ -44,7 +44,7 @@ module.exports = {
         }
 
         if (phaseType[0] == "NIGHT") {
-            message.channel.send("Jesus is mafia!.");
+            message.channel.send("It's night time, go the fuck to sleep.");
             return;
         }
 
