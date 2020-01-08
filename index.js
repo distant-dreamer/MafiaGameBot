@@ -10,8 +10,6 @@ client.commands = new Discord.Collection();
 
 //Enmap
 const Enmap = require("enmap");
-//const EnmapLevel = require("enmap-level");
-//const EnmapRethink = require('enmap-rethink');
 
 client.votes = new Enmap({
 	name: "votes",
