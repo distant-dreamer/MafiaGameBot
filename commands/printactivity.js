@@ -1,5 +1,6 @@
 
 const Enmap = require("enmap");
+const fs = require('fs');
 
 module.exports = {
 	name: 'printactivity',
@@ -9,11 +10,11 @@ module.exports = {
 	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		// const gm = client.votes.get("GM");
-		// if (!gm.includes(message.author.id)) {
-		// 	message.channel.send("That DATA is not for you.")
-		// 	return;
-		// }
+		const gm = client.votes.get("GM");
+		if (!gm.includes(message.author.id)) {
+			message.channel.send("That DATA is not for you.")
+			return;
+		}
 
 		keyArray = client.votes.indexes
         const activity_array = client.votes.get("ACTIVITY_DATA");
@@ -58,10 +59,24 @@ module.exports = {
         }
 
 
-  		message.channel.send("Placing into hastebin.");
-  		hastebin(printString, "js").then(function(r){
-  			return message.channel.send(r).catch(console.log("Uh.....hastebin pooped."))
-  		});
+		//Pastebin Time
+
+		message.channel.send("Making file...");
+
+		var user = client.fetchUser(gm[0]).then(user => {
+			const gm_username = user.username;
+
+			fs.writeFile("MafiaStats_" + gm_username + "_" + String(printString.length) + ".txt", printString, (err) => {
+				// throws an error, you could also catch it here
+				if (err) throw err;
+
+				// success case, the file was saved
+				message.channel.send("File made!");
+			});
+
+		});
+		
+
 
 
 	}
