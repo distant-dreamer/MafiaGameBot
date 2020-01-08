@@ -12,7 +12,7 @@
     "better-sqlite3": "^4.1.4",
     "discord.js": "^11.4.2",
     "enmap": "^4.3.2",
-    "sqlite": "^3.0.0",
+    "sqlite": "^3.0.0"
   },
   "optionalDependencies": {
     "bufferutil": "^3.0.5"
