@@ -14,10 +14,9 @@ module.exports = {
 			message.channel.send("Hey there sunshine. What you want all that for?")
 			return;
 		}
-
 		
 
-		const downloadChannel = client.channels.get(args[0]);
+		const downloadChannel = client.channels.cache.get(args[0]);
 		var channelMessages = "";
 		var posts;
 		var lastMessage;
@@ -57,8 +56,6 @@ module.exports = {
 			  		var lastMessage = messages.find(m => m.createdTimestamp == lastTimestamp)
 			  
 			  		console.log(channelMessages.length);
-
-
 
 			  		//RecursesetTimeout() the function
 			  		setTimeout(downloadAllMessages, 100, lastMessage.id);

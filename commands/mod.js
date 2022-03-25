@@ -18,20 +18,21 @@ module.exports = {
 			return message.channel.send("What? I need a user id.")
 		}
 
-		else {
+		let inputUser = args.shift();
 
-			const userid = args[0];
+		let player = message.guild.members.cache.find(m => m.user.username.toLowerCase() == inputUser.toLowerCase());
+		if (!player)
+			return message.channel.send(`No player found mathching input: **${inputUser}** (it must be exact)`);
 
-			if (gm.includes(userid)) {
-				message.channel.send(client.users.get(userid).username + " has already has mod control.");
-				return;
-			} 
-
-			gm.push(userid)
-			client.votes.set("GM", gm); 
-			message.channel.send(client.users.get(userid).username + " has been given moderation permissions.");
+		if (gm.includes(player.username)) {
+			message.channel.send(`${player.username} already has mod contorl.`);
 			return;
 		}
-		
+
+		gm.push(player.id);
+		client.votes.set("GM", gm);
+		message.channel.send(player.user.username + " has been given moderation permissions.");
+		return;
+
 	}
 };

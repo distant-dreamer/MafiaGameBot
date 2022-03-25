@@ -19,7 +19,7 @@ module.exports = {
 			return message.channel.send("Do what now? You need to say what you're doing. Format as: !Night X, [action]");
 		}
 
-		client.channels.get(actionLogChannelID).send(
+		client.channels.cache.get(actionLogChannelID).send(
 			"----------------------------------------\n" + message.author.username + ":\n```" + action + "```"
 			);
 		message.reply("Action sent.");

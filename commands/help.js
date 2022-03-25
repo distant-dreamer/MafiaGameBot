@@ -27,10 +27,10 @@ module.exports = {
 
 		if (!args.length) {
 			data.push('*Here is what you need to setup the bot:*\n**!gm** - makes you the GM\n**!setup <Mafia Role>** - sets up the game with all players with a "mafia player" role\n\**!votechannel <votechannelID>** - sets the main voting channel\n**!log <logchannelID>** - sets the voting log channel (required)\n**!vault <vaultchannelID>** - sets the secret vault channel\n\n');
-			data.push('*Here is what should be you main command loop during the game:*\n\n__**BEGIN NIGHT PHASE:**__\n**!votedata** - gives data on who and who hasn\'t voted\n**!kill <player>** - removes a player from the playerlist\n**!newphase night <phase#>** - closes voting funtionality for the night\n__**BEGIN DAY PHASE:**__\n**!kill <player>** - removes a player from the playerlist\n**!newphase day <phase#>** - activates voting and clears the votes\n');
+			data.push('*Here is what should be you main command loop during the game:*\n\n__**BEGIN NIGHT PHASE:**__\n**!votedata** - gives data on who and who hasn\'t voted\n**printdm** - shows who has send !dm (if you are a public DM game)\n**!kill <player>** - removes a player from the playerlist\n**!newphase night <phase#>** - closes voting funtionality for the night\n\n__**BEGIN DAY PHASE:**__\n**!kill <player>** - removes a player from the playerlist\n**!newphase day <phase#>** - activates voting and clears the votes\n');
 			data.push('**------ALL COMMANDS------**');
 			data.push(commands.map(command => command.name).join(', '));
-			return message.channel.send(data, { split: true });
+			return message.channel.send(data.join("\n"));
 		}
 
 		const name = args[0].toLowerCase();
@@ -47,7 +47,7 @@ module.exports = {
 		if (command.description) data.push(`**Description:** ${command.description}`);
 		if (command.cooldown) data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
-		message.channel.send(data, { split: true });
+		message.channel.send(data.join("\n"));
 		
 	}
 };

@@ -15,12 +15,13 @@ module.exports = {
 			return;
 		}
 
-		const jailIntercomChannelID = args[0];
-		client.votes.set("JAIL_INTERCOM", jailIntercomChannelID);
+		const jailCellChannelID = args.shift();
+		const jailIntercomChannel = client.channels.cache.get(jailCellChannelID);
+		if (!jailIntercomChannel)
+			return message.channel.send("Invalid channel ID");
+		client.votes.set("JAIL_INTERCOM", jailIntercomChannel.id);
 
-		const jailIntercomChannel = client.channels.get(jailIntercomChannelID).toString();
-
-		client.channels.get(jailIntercomChannelID).send("This is the designated Jail Intercom.");
-		message.channel.send("Jail Intercom set to: " + jailIntercomChannelID);
+		client.channels.cache.get(jailIntercomChannel.id).send("This is the designated Jail Intercom.");
+		message.channel.send("Jail Intercom set to: " + jailIntercomChannel.toString());
 	}
 };

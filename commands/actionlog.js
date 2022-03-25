@@ -16,9 +16,11 @@ module.exports = {
 		
 		client.votes.set("ACTION_LOG", actionLogChannelID);
 
-		const actionLogString = client.channels.get(actionLogChannelID).toString();
+		let actionLog = client.channels.cache.get(actionLogChannelID);
+		if (!actionLog)
+			return message.channel.send(`Unknown channel with ID: ${actionLogChannelID}`);
 
-		client.channels.get(actionLogChannelID).send("What will they do? Where will they go? Find out here!");
-		message.channel.send("Action Log set to: " + actionLogString);
+		actionLog.send("What will they do? Where will they go? Find out here!");
+		message.channel.send("Action Log set to " + actionLog.toString());
 	}
 };

@@ -15,13 +15,13 @@ module.exports = {
 			return;
 		}
 
-		const voteChannelID = args[0];
-		client.channels.get(voteChannelID);
-		const voteChannelName = client.channels.get(voteChannelID).toString();
-
+		const voteChannelID = args.shift();
+		let voteChannel = client.channels.cache.get(voteChannelID);
+		if (!voteChannel)
+			return message.channel.send(`Unknown channel with ID: ${voteChannelID}`);
 
 		try {
-			client.channels.get(voteChannelID).send("Voting happens here!");
+			client.channels.cache.get(voteChannelID).send("Voting happens here!");
 
 		}
 		catch (error) {
@@ -33,6 +33,6 @@ module.exports = {
 		client.votes.set("VOTE_CHANNEL", voteChannelID);
 		client.votes.set("ACTIVITY_DATA", []);
 
-		message.channel.send("Voting channel set to: " + voteChannelName);
+		message.channel.send("Voting channel set to: " + voteChannel.toString());
 	}
 };

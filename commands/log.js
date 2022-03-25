@@ -18,9 +18,9 @@ module.exports = {
 		const logChannelID = args[0];
 		client.votes.set("LOG", logChannelID);
 
-		const logChannelName = client.channels.get(logChannelID).toString();
+		const logChannelName = client.channels.cache.get(logChannelID).toString();
 
-		client.channels.get(logChannelID).send("This log channel is so designated.");
+		client.channels.cache.get(logChannelID).send("This log channel is so designated.");
 		message.channel.send("Log channel set to: " + logChannelName);
 	}
 };

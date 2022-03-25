@@ -1,15 +1,25 @@
 const fs = require('fs');
 const Discord = require('discord.js');
+const { Client, Intents } = require('discord.js');
 const Attachment = require('discord.js');
 const { prefix, token } = require('./config.json');
-const cooldowns = new Discord.Collection();
 
+const myIntents = new Discord.Intents();
+myIntents.add(
+	Intents.FLAGS.GUILDS,
+	Intents.FLAGS.GUILD_MEMBERS,
+	Intents.FLAGS.GUILD_PRESENCES,
+	Intents.FLAGS.GUILD_MESSAGES,
+	Intents.FLAGS.DIRECT_MESSAGES
+);
 
-const client = new Discord.Client();
+let client = new Client({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL'] });
+
 client.commands = new Discord.Collection();
 
 //Enmap
 const Enmap = require("enmap");
+const UtiltiyFunctions = require('./UtiltiyFunctions');
 
 client.votes = new Enmap({
 	name: "votes",
@@ -29,47 +39,43 @@ for (const file of commandFiles) {
 }
 
 
-
-
-
 client.on('ready', () => {
-	console.log('Ready!');
+	console.log('It\'s time to get sus!');
 });
 
-client.on('message', message => {
-
-	
-
+client.on('messageCreate', async message => {
 
 	if (message.author.bot) return; // Ignore bots.
 
-	if (message.channel.type === "dm" && !message.content.startsWith(prefix)) {
+	if (message.channel.type === "DM" && !message.content.startsWith(prefix)) {
 
 		const vaultChannelID = client.votes.get("VAULT");//Get vault channel;
 		const guildID = client.votes.get("GUILD_ID");//Get Guild ID
 
-		if (vaultChannelID != undefined && guildID != undefined) {
+		if (vaultChannelID && guildID) {
 			//Color and send message
-			const user = client.guilds.get(guildID).fetchMember(message.author).then((user) => {
-				var color = user.displayHexColor;
+			let guild = client.guilds.cache.find(g => g.id == guildID);
+			let member = guild.members.cache.find(m => m.id == message.author.id);
+			let color;
+			if (member)
+				color = member.displayHexColor;
 
-				//Put the message in a cute little embed
-				const embed = new Discord.RichEmbed()
-					.setDescription(message.content)
-					.setColor(color)
-					.setAuthor(message.author.username, message.author.avatarURL )
+			let image = member.displayAvatarURL();
+			//Put the message in a cute little embed
+			let embed = new Discord.MessageEmbed()
+				.setDescription(message.content)
+				.setColor(color)
+				.setAuthor({ name: message.author.username, iconURL: member.displayAvatarURL() })
 
-				//Add Image if it exists
-				if (message.attachments.array().length != 0) {
-					embed.setImage(message.attachments.array()[0].url)
-				}
+			//Add Image if it exists
+			if (message.attachments.size)
+				embed.setImage(message.attachments.first().url)
 
-				client.channels.get(vaultChannelID).send(embed);
-			})		
+			await client.channels.cache.get(vaultChannelID).send({ embeds: [embed] });
 
-			message.author.send("Sent to vault.").then(msg => {
-				 msg.delete(5000);
- 				 });
+			let vaultMessage = await message.author.send("Sent to vault.");
+			await UtiltiyFunctions.sleep(5000);
+			vaultMessage.delete();
 		}
 		else {
 			message.author.send("The GM needs to setup the vault channel.");
@@ -78,35 +84,29 @@ client.on('message', message => {
 	}
 	//if (message.author.role !== "God") return;
 
-	// var jailCellChannelID = client.votes.get("JAIL_CELL");
-	// var jailIntercomChannelID = client.votes.get("JAIL_INTERCOM");
+	var jailCellChannelID = client.votes.get("JAIL_CELL");
+	var jailIntercomChannelID = client.votes.get("JAIL_INTERCOM");
 
-	// const gm = client.votes.get("GM");
-	// if (gm != undefined && message.author.id != gm) { //ignore messeges from gm
-	// 	//TO JAILOR
-	// 	if (message.channel.id == jailCellChannelID) {
-	// 		client.channels.get(jailIntercomChannelID).send("**" + message.author.username + "**: " + message.content);
-	// 		client.channels.get(jailCellChannelID).stopTyping();
-	// 		message.channel.send('Sent to ???.')
-	// 				.then(msg => {
-	// 				 msg.delete(3000)
-	// 					 })
-	// 				.catch();
-	// 		return;
-	// 	}
+	const gm = client.votes.get("GM");
+	if (gm && message.author.id != gm) { //ignore messeges from gm
+		//TO JAILOR
+		if (message.channel.id == jailCellChannelID) {
+			client.channels.cache.get(jailIntercomChannelID).send("**" + message.author.username + "**: " + message.content);
+			let vaultMessage = await message.channel.send('Sent to ???.')
+			await UtiltiyFunctions.sleep(3000);
+			vaultMessage.delete();
+			return;
+		}
 
-	// 	//TO JAILCELL
-	// 	if (message.channel.id == jailIntercomChannelID) {
-	// 		client.channels.get(jailCellChannelID).send("**???:**  " + message.content);
-	// 		client.channels.get(jailIntercomChannelID).stopTyping();
-	// 		message.channel.send('Sent to hidden room')
-	// 				.then(msg => {
-	// 				 msg.delete(3000)
-	// 					 })
-	// 				.catch();
-	// 		return;
-	// 	}
-	// }
+		//TO JAILCELL
+		if (message.channel.id == jailIntercomChannelID) {
+			client.channels.cache.get(jailCellChannelID).send("**???:**  " + message.content);
+			let vaultMessage = await message.channel.send('Sent to hidden room')
+			await UtiltiyFunctions.sleep(3000);
+			vaultMessage.delete();
+			return;
+		}
+	}
 
 	/*
 	MONOKUMA
@@ -133,13 +133,13 @@ client.on('message', message => {
 	const votechannel = client.votes.get("VOTE_CHANNEL");
 	const phase = client.votes.get("PHASE");
 
-	if (phase && message.channel.id == votechannel ) {
+	if (phase && message.channel.id == votechannel) {
 
 		var activity_array = client.votes.get("ACTIVITY_DATA");
 		if (!activity_array) {
 			client.votes.set("ACTIVITY_DATA", []);
 		}
-	
+
 
 		var updateflag = false;
 		//Look up phase and player and add to it.
@@ -177,13 +177,13 @@ client.on('message', message => {
 
 	//SINGUPS--------------------
 
-	
+
 
 	// const signupchannel = client.votes.get("SIGNUPS");
 	// //client.votes.set("SIGNUPCOUNT", 4);
 	// if (message.channel.id == signupchannel) {
 
-		
+
 	// 	const playerMax = 20;
 
 	// 	console.log(message.author.username + " " + message.content);
@@ -214,17 +214,17 @@ client.on('message', message => {
 	// 		}
 
 	// 		return
-		
+
 	// 	} else {
 	// 		message.channel.send('`Incorrect input`').then(msg => {msg.delete(5000)}).catch();
 	// 		message.delete();
 	// 		return;
 	// 	}
 	// }
-	
-	
-	
-	
+
+
+
+
 	/*
 
 	
@@ -263,31 +263,18 @@ client.on('message', message => {
 
 	if (!command) return;
 
-	if (command.args && !args.length) {
-		let reply = 'Where are the arguments???';
-
-		if (command.usage) {
-			reply += '\nProper usage: \'${prefix}${command.name} ${command.usage}\'';
-
-		}
-	}
-
 	//Notify if this can only be sent in guild
-	if (command.guildonly && message.channel.type === "dm") {
-		message.reply('This command cannot be sent as a DM. Send it in the server instead.');
-		return;
-	}
+	if (command.guildonly && message.channel.type === "dm")
+		return message.reply('This command cannot be sent as a DM. Send it in the server instead.');
 
 	//Notify if this can only be sent in dm
-	if (command.dmonly && message.channel.type === "text") {
-		message.reply('This command cannot be sent in the server. Send it as a DM instead.');
-		return;
-	}
+	if (command.dmonly && message.channel.type === "text")
+		return message.reply('This command cannot be sent in the server. Send it as a DM instead.');
 
 	//COOLDOWN
 	/*
 	if (!cooldowns.has(command.name)) {
-    	cooldowns.set(command.name, new Discord.Collection());
+		cooldowns.set(command.name, new Discord.Collection());
 	}
 
 	const now = Date.now();
@@ -295,28 +282,28 @@ client.on('message', message => {
 	const cooldownAmount = (command.cooldown || 3) * 1000;
 
 	if (!timestamps.has(message.author.id)) {
-	    timestamps.set(message.author.id, now);
-    	setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		timestamps.set(message.author.id, now);
+		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
 	else {
-	    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
-	    if (now < expirationTime) {
-	        const timeLeft = (expirationTime - now) / 1000;
-	        return message.reply(`slow down! You need to wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command!`);
-	    }
+		if (now < expirationTime) {
+			const timeLeft = (expirationTime - now) / 1000;
+			return message.reply(`slow down! You need to wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command!`);
+		}
 
-	    timestamps.set(message.author.id, now);
-	    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		timestamps.set(message.author.id, now);
+		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
 	*/
 
 	try {
-	    command.execute(client, message, args);
+		command.execute(client, message, args);
 	}
 	catch (error) {
-	    console.error(error);
-	    message.reply('there was an error trying to execute that command!');
+		console.error(error);
+		message.reply(`There was an error trying to execute that command!\`\`\`${error}\`\`\``);
 	}
 });
 

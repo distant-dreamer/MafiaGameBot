@@ -15,12 +15,14 @@ module.exports = {
 			return;
 		}
 
-		const jailCellChannelID = args[0];
-		client.votes.set("JAIL_CELL", jailCellChannelID);
+		const jailCellChannelID = args.shift();
+		const jailCellChannel = client.channels.cache.get(jailCellChannelID);
+		if (!jailCellChannel)
+			return message.channel.send("Invalid channel ID");
 
-		const jailCellChannel = client.channels.get(jailCellChannelID).toString();
+		client.votes.set("JAIL_CELL", jailCellChannel.id);
 
-		client.channels.get(jailCellChannelID).send("This is the designated Jail Cell.");
-		message.channel.send("Jail Cell set to: " + jailCellChannelID);
+		client.channels.cache.get(jailCellChannel.id).send("This is the designated Jail Cell.");
+		message.channel.send("Jail Cell set to: " + jailCellChannel.toString());
 	}
 };

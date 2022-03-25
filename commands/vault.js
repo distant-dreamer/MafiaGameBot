@@ -17,9 +17,9 @@ module.exports = {
 		const vaultChannelID = args[0];
 		client.votes.set("VAULT", vaultChannelID);
 
-		const vaultChannelName = client.channels.get(vaultChannelID).toString();
+		const vaultChannelName = client.channels.cache.get(vaultChannelID).toString();
 
-		client.channels.get(vaultChannelID).send("The vault is locked.");
+		client.channels.cache.get(vaultChannelID).send("The vault is locked.");
 		message.channel.send("Vault set to: " + vaultChannelName);
 	}
 };

@@ -17,9 +17,9 @@ module.exports = {
 		const signupChannelID = args[0];
 		client.votes.set("SIGNUPS", signupChannelID);
 
-		const signupChannelName = client.channels.get(signupChannelID).toString();
+		const signupChannelName = client.channels.cache.get(signupChannelID).toString();
 
-		client.channels.get(signupChannelID).send("Signup here!");
+		client.channels.cache.get(signupChannelID).send("Signup here!");
 		message.channel.send("Sign up channel set to: " + signupChannelName + ".\nSet automatic role assignment with \"!signuprole\"");
 	}
 };

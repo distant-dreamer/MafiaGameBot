@@ -15,20 +15,21 @@ module.exports = {
 			message.channel.send("I'll setup your ass.")
 			return;
 		}
+		let roleMembers;
 
 		const mafiaPlayerRole = message.content.replace((prefix + "setup "), "");
 		if (mafiaPlayerRole.length == 0) {
 			message.channel.send("You need to enter a role.");
 		}
 		try {
-			const roleMembers = message.guild.roles.find(x => x.name == mafiaPlayerRole).members.array();
+			let role = message.guild.roles.cache.find(x => x.name == mafiaPlayerRole);
+			roleMembers = [...role.members.values()];
 		}
 		catch (error) {
-			message.channel.send("Invalid role.");
+			message.channel.send("Invalid role. " + error );
 			return;
 		}
 
-		const roleMembers = message.guild.roles.find(x => x.name == mafiaPlayerRole).members.array();
 		var playerString = "*";
 		var voteDataArray = [];
 		for (var i in roleMembers) {

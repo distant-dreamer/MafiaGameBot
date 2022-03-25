@@ -11,15 +11,16 @@ module.exports = {
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
 
-		if (!gm) {message.channel.send("There is no current Game Master!"); return;}
+		if (!gm) { message.channel.send("There is no current Game Master!"); return; }
 
-		message.channel.send("The current Game Master(s): ");
-		var masters = '';
+		var masters = [];
 		for (i in gm) {
-			var user = client.fetchUser(gm[i]).then(user => {
-				message.channel.send(user.username);
-			});
+			var member = message.guild.members.cache.find(m => m.id == gm[i]);
+			if (!member)
+				return message.channel.send(`...uh, idk who god is, actually. I can't find them. I have this stored though: ${gm[i]}`);
+			masters.push(member.user.username);
 		}
+		message.channel.send(`Current Game Master(s):\n${masters.join("\n")}`);
 
 	}
 };

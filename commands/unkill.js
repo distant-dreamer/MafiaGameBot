@@ -23,9 +23,13 @@ module.exports = {
 			return;
 		}
 
-		var newPlayer = message.content.replace(prefix+"unkill ", "");
+		var newPlayerInput = message.content.replace(prefix+"unkill ", "");
 
-		voteDataArray.push([newPlayer, 0, [""]]); //Add player
+		let player = message.guild.members.cache.find(m => m.user.username.toLowerCase() == newPlayerInput.toLowerCase());
+		if (!player)
+			return message.channel.send(`No player found mathching input: **${newPlayerInput}** (your input must be exact to their username)`);
+
+		voteDataArray.push([newPlayerInput, 0, [""]]); //Add player
 		voteDataArray.sort();
 
 		var playerArray = [];
@@ -38,14 +42,13 @@ module.exports = {
 		//Majority
 		const playerCount = voteDataArray.length-1;
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
-
 		
 		client.votes.set("VOTE_DATA", voteDataArray); 
 		client.votes.set("MAJORITY", majority);
 
 		var playerStrings = playerArray.toString().replace(/,/g, "\n");
 
-		message.channel.send(newPlayer + " has been given new life.\n__Current Players (" + playerCount + "):__ \n*" + playerStrings + "*\nMajority has been readjusted to: " + majority);
+		message.channel.send(newPlayerInput + " has been given new life.\n__Current Players (" + playerCount + "):__ \n*" + playerStrings + "*\nMajority has been readjusted to: " + majority);
 		
 	}
 };

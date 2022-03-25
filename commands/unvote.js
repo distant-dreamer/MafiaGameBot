@@ -64,9 +64,6 @@ module.exports = {
     	
     	if (unvotedPlayer == "") {
     		message.channel.send("You haven't voted yet.")
-            	.then(msg => {
-					msg.delete(1500)
-		 		})
     		return;
     	}
 
@@ -105,31 +102,30 @@ module.exports = {
         }
 
         //Output in an embed
-        const votedPlayerObject = message.guild.members.find(x => x.user.username === unvotedPlayer)
+        const votedPlayerObject = message.guild.members.cache.find(x => x.user.username === unvotedPlayer)
         var color = 0xFFFFFF;
         var avatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
 
         try {
             color  = votedPlayerObject.displayHexColor;
-            avatar = votedPlayerObject.user.avatarURL;
+            avatar = votedPlayerObject.user.avatarURL();
         }
         catch(error) {
             var color = 0xFFFFFF;
             var avatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
         }
 
-        const voteEmbed = new Discord.RichEmbed()
-            .setAuthor(message.author.username + " took away their vote on " + unvotedPlayer, message.author.avatarURL)
+        const voteEmbed = new Discord.MessageEmbed()
+            .setAuthor({name: "❌ " + message.author.username + " took away their vote on " + unvotedPlayer, iconURL: message.author.avatarURL()})
             .setColor(color)
             .setThumbnail(avatar)
             .setTitle("-----VOTES ("+ sumVotes +")-----\n" + descriptionText);
-            //.addField("-----VOTES ("+ sumVotes +")-----", descriptionText, true)
 
         //send to channel
-        message.channel.send(voteEmbed);
+        message.channel.send({embeds: [voteEmbed]});
         //Place in log bot
         if (logChannelID) {
-            client.channels.get(logChannelID).send(voteEmbed);
+            client.channels.cache.get(logChannelID).send({embeds: [voteEmbed]});
         }
         else {
             message.channel.send("<@" + gm + ">, you need to set the log channel!");

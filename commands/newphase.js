@@ -57,7 +57,7 @@ module.exports = {
 					numSuns += "☀";
 				}
 
-			    client.channels.get(logChannelID).send("**" + numSuns + phaseType + " " + phaseNum + numSuns + "**");
+			    client.channels.cache.get(logChannelID).send("**" + numSuns + phaseType + " " + phaseNum + numSuns + "**");
 
 				message.channel.send("Votes cleared for " + playerCount + " players.\nDefault majority set to: " + majority + "\nPrepared for " + phaseType + " " + phaseNum);
 
