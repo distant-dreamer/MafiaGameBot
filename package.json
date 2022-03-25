@@ -9,13 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite-pool": "^0.3.0",
-    "better-sqlite3": "^4.1.4",
     "discord.js": "^11.6.4",
-    "enmap": "^4.8.7",
-    "sqlite": "^3.0.0"
-  },
-  "optionalDependencies": {
-    "bufferutil": "^3.0.5"
+    "enmap": "^5.8.8"
   }
 }

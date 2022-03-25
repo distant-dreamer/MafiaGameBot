@@ -20,7 +20,6 @@ module.exports = {
 		//Iterate though data and post voters
 		var voteDataString = "-----VOTE DATA-----\n";
 		var hasVoted = [];
-		console.log(voteDataArray);
 		for (const i in voteDataArray) {
 			for (var voter in voteDataArray[i][2]){
 				if (voteDataArray[i][2][voter] != (undefined || "")){

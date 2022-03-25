@@ -17,7 +17,6 @@ module.exports = {
 		}
 
 		const mafiaPlayerRole = message.content.replace((prefix + "setup "), "");
-		console.log(mafiaPlayerRole);
 		if (mafiaPlayerRole.length == 0) {
 			message.channel.send("You need to enter a role.");
 		}
@@ -50,7 +49,5 @@ module.exports = {
 		client.votes.set("MAJORITY", majority);
 
 		message.channel.send("Game setup for " + playerCount + " players.\n*" + playerString + "*\nDefault majority set to: " + majority);
-		
-		
 	}
 };
