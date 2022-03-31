@@ -2,13 +2,14 @@ const Enmap = require("enmap");
 const Discord = require('discord.js');
 const { prefix, token } = require('../config.json');
 const Permissions = require("discord.js/src/util/Permissions");
+const UtilityFunctions = require("../UtilityFunctions");
 
 module.exports = {
     name: 'vote',
     description: 'Votes for a player',
     format: "!vote <player>",
     guildonly: true,
-    execute(client, message, args) {
+    async execute(client, message, args) {
         //Check if it's day
 
         let gm = client.votes.get("GM");
@@ -138,24 +139,21 @@ module.exports = {
         if (zeroPlayer_i) {
             voteOrderArray.splice(zeroPlayer_i, 1);
         }
-
+        
         //Output in an embed
-        let votedPlayerObject = message.guild.members.cache.find(x => x.user.username === votedPlayer)
+        let votedPlayerMember = message.guild.members.cache.find(x => x.user.username === votedPlayer)
 
         let color = 0xFFFFFF;
-        let avatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
+        let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
 
-        try {
-            color = votedPlayerObject.displayHexColor;
-            avatar = votedPlayerObject.user.avatarURL();
-        }
-        catch (error) {
-        }
+        color = votedPlayerMember.displayHexColor;
+        votedAvatar = await UtilityFunctions.GetStoredUserURL(client, message, votedPlayerMember.user.id);
+        let voterAvatar = await UtilityFunctions.GetStoredUserURL(client, message, message.author.id);
 
         const voteEmbed = new Discord.MessageEmbed()
-            .setAuthor({name: message.author.username + " voted for " + votedPlayer, iconURL: message.author.avatarURL()})
+            .setAuthor({ name: message.author.username + " voted for " + votedPlayer, iconURL: voterAvatar })
             .setColor(color)
-            .setThumbnail(avatar)
+            .setThumbnail(votedAvatar)
             .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);
 
         //send to channel
@@ -166,7 +164,7 @@ module.exports = {
             message.channel.send("<@" + gm[0] + ">, you need to set the log channel!");
         else {
             let logChannel = client.channels.cache.get(logChannelID);
-            if (logChannel) 
+            if (logChannel)
                 logChannel.send({ embeds: [voteEmbed] });
         }
 
@@ -179,7 +177,7 @@ module.exports = {
 
                 //Lock Hammered out of chat
                 try {
-                    message.channel.permissionOverwrites.create(votedPlayerObject, { SEND_MESSAGES: false });
+                    message.channel.permissionOverwrites.create(votedPlayerMember, { SEND_MESSAGES: false });
                     message.channel.send("*" + votedPlayer + " has been locked out of " + message.channel.name + " and can no loger post in this channel.*");
                 }
                 catch (error) {

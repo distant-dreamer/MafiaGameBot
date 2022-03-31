@@ -19,7 +19,7 @@ client.commands = new Discord.Collection();
 
 //Enmap
 const Enmap = require("enmap");
-const UtiltiyFunctions = require('./UtiltiyFunctions');
+const UtiltiyFunctions = require('./UtilityFunctions');
 
 client.votes = new Enmap({
 	name: "votes",
@@ -60,12 +60,12 @@ client.on('messageCreate', async message => {
 			if (member)
 				color = member.displayHexColor;
 
-			let image = member.displayAvatarURL();
+			let avatar = await UtiltiyFunctions.GetStoredUserURL(client, message, member.user.id); 
 			//Put the message in a cute little embed
 			let embed = new Discord.MessageEmbed()
 				.setDescription(message.content)
 				.setColor(color)
-				.setAuthor({ name: message.author.username, iconURL: member.displayAvatarURL() })
+				.setAuthor({ name: message.author.username, iconURL: avatar })
 
 			//Add Image if it exists
 			if (message.attachments.size)

@@ -1,13 +1,14 @@
 
 const Enmap = require("enmap");
 const { prefix, token } = require('../config.json');
+const UtilityFunctions = require("../UtilityFunctions");
 
 module.exports = {
 	name: 'setup',
 	description: 'Adds a player to the current game',
 	format: "!setup <role>",
 	guildonly: true,
-	execute(client, message, args) {
+	async execute(client, message, args) {
 
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
@@ -32,8 +33,10 @@ module.exports = {
 
 		var playerString = "*";
 		var voteDataArray = [];
-		for (var i in roleMembers) {
-			playerString += roleMembers[i].user.username + "\n";
+		for (let i in roleMembers) {
+			let user = roleMembers[i].user;
+			playerString += user.username + "\n";
+			await UtilityFunctions.GetStoredUserURL(client, message, user.id);
 			voteDataArray[i] = [roleMembers[i].user.username, 0, [""]] //playerstring, voteCount, [voters]
 		}
 
