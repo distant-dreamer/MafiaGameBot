@@ -66,8 +66,8 @@ module.exports = {
         return newURL;
     },
 
-    async GetVoteEmbed(client, message, votedUsername, voterUsername, { isVoted = true } = {}) {
-        let votedPlayerMember = message.guild.members.cache.find(x => x.user.username === votedUsername)
+    async GetVoteEmbed(client, message, votedUsername, sumVotes, descriptionText, { isVoted = true } = {}) {
+        let votedPlayerMember = message.guild.members.cache.find(x => x.user.username === votedUsername);
         let color = 0xFFFFFF;
         let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
 
@@ -80,7 +80,7 @@ module.exports = {
             `❌ ${message.author.username} took away their vote on ${votedUsername}`;
 
         return new Discord.MessageEmbed()
-            .setAuthor({ name: label, iconURL: voterAvatar })
+            .setAuthor({ name: label, iconURL: voterAvatar, url: message.url })
             .setColor(color)
             .setThumbnail(votedAvatar)
             .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);

@@ -41,7 +41,7 @@ module.exports = {
 
         //Put arguments into string
 
-        let votedPlayer = message.content.replace(prefix + "vote ", ""); //remove "!vote"
+        let votedUsername = message.content.replace(prefix + "vote ", ""); //remove "!vote"
         let voteOrderArray = client.votes.get("VOTE_ORDER");//array of ordered voted players 
         let majority = client.votes.get("MAJORITY"); //Majority
         let logChannelID = client.votes.get("LOG"); //Log
@@ -52,13 +52,13 @@ module.exports = {
         let unvotedPlayer = "";
         //Place vote in table
         for (const i in voteDataArray) {
-            if (voteDataArray[i][0].toLowerCase().includes(votedPlayer.toLowerCase())) {
+            if (voteDataArray[i][0].toLowerCase().includes(votedUsername.toLowerCase())) {
                 //match input to name in array
-                votedPlayer = voteDataArray[i][0];
+                votedUsername = voteDataArray[i][0];
 
                 //Check to see if they've already voted for them
                 if (voteDataArray[i][2].includes(message.author.username)) {
-                    message.channel.send("You can't vote for " + votedPlayer + " again!")
+                    message.channel.send("You can't vote for " + votedUsername + " again!")
                     return;
                 }
 
@@ -70,11 +70,11 @@ module.exports = {
 
                 //Add voted to Vote order
                 try {
-                    if (!voteOrderArray.includes(votedPlayer))
-                        voteOrderArray.push(votedPlayer);
+                    if (!voteOrderArray.includes(votedUsername))
+                        voteOrderArray.push(votedUsername);
                 }
                 catch (error) {
-                    voteOrderArray = new Array[votedPlayer];
+                    voteOrderArray = new Array[votedUsername];
                 }
 
                 //Check if another player needs to be unvoted
@@ -101,7 +101,7 @@ module.exports = {
         }
 
         if (!inputMatch)
-            return message.channel.send(`Invalid player: ${votedPlayer}.`);
+            return message.channel.send(`Invalid player: ${votedUsername}.`);
 
         let descriptionText = "";
         let sumVotes = 0;
@@ -124,7 +124,7 @@ module.exports = {
                 }
             }
 
-            if (voteOrderArray[player] == votedPlayer) {
+            if (voteOrderArray[player] == votedUsername) {
                 descriptionText += "__**" + voteOrderArray[player] + ":  " + numVotes + "**__\n";
             }
             else if (voteOrderArray[player] == unvotedPlayer) {
@@ -140,21 +140,7 @@ module.exports = {
             voteOrderArray.splice(zeroPlayer_i, 1);
         }
         
-        //Output in an embed
-        let votedPlayerMember = message.guild.members.cache.find(x => x.user.username === votedPlayer)
-
-        let color = 0xFFFFFF;
-        let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
-
-        color = votedPlayerMember.displayHexColor;
-        votedAvatar = await UtilityFunctions.GetStoredUserURL(client, message, votedPlayerMember.user.id);
-        let voterAvatar = await UtilityFunctions.GetStoredUserURL(client, message, message.author.id);
-
-        const voteEmbed = new Discord.MessageEmbed()
-            .setAuthor({ name: message.author.username + " voted for " + votedPlayer, iconURL: voterAvatar })
-            .setColor(color)
-            .setThumbnail(votedAvatar)
-            .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);
+        let voteEmbed = await UtilityFunctions.GetVoteEmbed(client, message, votedUsername, sumVotes, descriptionText);
 
         //send to channel
         message.channel.send({ embeds: [voteEmbed] });
@@ -171,17 +157,17 @@ module.exports = {
         //Check for majority
         if (highestVote == majority) {
             if (!hammerReached) {
-                message.channel.send("<@" + gm[0] + ">, " + message.author.username + " has placed the hammer on " + votedPlayer + "!");
+                message.channel.send("<@" + gm[0] + ">, " + message.author.username + " has placed the hammer on " + votedUsername + "!");
                 client.channels.cache.get(logChannelID).send("🔨🔨🔨🔨🔨🔨🔨"); //Posts hammers
                 hammerReached = true;
 
                 //Lock Hammered out of chat
                 try {
                     message.channel.permissionOverwrites.create(votedPlayerMember, { SEND_MESSAGES: false });
-                    message.channel.send("*" + votedPlayer + " has been locked out of " + message.channel.name + " and can no loger post in this channel.*");
+                    message.channel.send("*" + votedUsername + " has been locked out of " + message.channel.name + " and can no loger post in this channel.*");
                 }
                 catch (error) {
-                    message.channel.send("Attempt to lock hammered player out of chat falied. Just don't talk here anymore, ok " + votedPlayer + "?");
+                    message.channel.send("Attempt to lock hammered player out of chat falied. Just don't talk here anymore, ok " + votedUsername + "?");
                 }
             }
         }

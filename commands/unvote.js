@@ -48,13 +48,13 @@ module.exports = {
         }
 
         //var votedPlayer = "";
-        var unvotedPlayer = "";
+        var unvotedUsername = "";
         phaseType = phaseType[0];
 
         //Remove vote & voter
         for (const i in voteDataArray) {
             if (voteDataArray[i][2].includes(message.author.username)) {
-                unvotedPlayer = voteDataArray[i][0];
+                unvotedUsername = voteDataArray[i][0];
                 //Undo player as voter
                 voteDataArray[i][2].splice(voteDataArray[i][2].indexOf(message.author.username), 1);
                 //Take away vote
@@ -63,7 +63,7 @@ module.exports = {
             }
         }
 
-        if (unvotedPlayer == "") {
+        if (unvotedUsername == "") {
             message.channel.send("You haven't voted yet.")
             return;
         }
@@ -86,7 +86,7 @@ module.exports = {
                 }
             }
 
-            if (voteOrderArray[player] == unvotedPlayer) {
+            if (voteOrderArray[player] == unvotedUsername) {
                 descriptionText += "__*" + voteOrderArray[player] + ":  " + numVotes + "*__\n";
                 if (numVotes == 0) {
                     zeroPlayer_i = player;
@@ -102,21 +102,7 @@ module.exports = {
             voteOrderArray.splice(zeroPlayer_i, 1);
         }
 
-        //Output in an embed
-        const votedPlayerMember = message.guild.members.cache.find(x => x.user.username === unvotedPlayer)
-        var color = 0xFFFFFF;
-        var votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
-
-        votedAvatar = await UtilityFunctions.GetStoredUserURL(client, message, votedPlayerMember.user.id);
-        let voterAvatar = await UtilityFunctions.GetStoredUserURL(client, message, message.author.id);
-        color = votedPlayerMember.displayHexColor;
-        votedAvatar = votedPlayerMember.user.avatarURL();
-
-        const voteEmbed = new Discord.MessageEmbed()
-            .setAuthor({ name: "❌ " + message.author.username + " took away their vote on " + unvotedPlayer, iconURL: voterAvatar })
-            .setColor(color)
-            .setThumbnail(votedAvatar)
-            .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);
+        let voteEmbed = await UtilityFunctions.GetVoteEmbed(client, message, unvotedUsername, sumVotes, descriptionText, {isVoted: false});
 
         //send to channel
         message.channel.send({ embeds: [voteEmbed] });
