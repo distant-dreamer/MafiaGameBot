@@ -1,6 +1,7 @@
 
 const Enmap = require("enmap");
 const { prefix, token } = require('../config.json');
+const UtilityFunctions = require("../UtilityFunctions");
 
 module.exports = {
 	name: 'unkill', 
@@ -12,6 +13,9 @@ module.exports = {
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
+		let deadUsernames = client.votes.get("DEAD_USERNAMES");
+		let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
+		let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
 
 		if (!gm.includes(message.author.id)) {
 			message.channel.send("You do not have the power over life and death, simpleton.");
@@ -38,6 +42,10 @@ module.exports = {
 				playerArray.push(voteDataArray[i][0]);
 			}	
 		}
+
+		deadUsernames = deadUsernames.filter(u => u != newPlayerInput);
+
+		UtilityFunctions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
 
 		//Majority
 		const playerCount = voteDataArray.length-1;

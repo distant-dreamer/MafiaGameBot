@@ -1,13 +1,14 @@
 
 const Enmap = require("enmap");
 const { prefix, token } = require('../config.json');
+const UtilityFunctions = require("../UtilityFunctions");
 
 module.exports = {
 	name: 'kill', 
 	description: 'kills a player and resets majority',
 	format: "!kill <player>",
 	guildonly: true,
-	execute(client, message, args) {
+	async execute(client, message, args) {
 
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
@@ -18,6 +19,7 @@ module.exports = {
 
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
 		var voteOrderArray = client.votes.get("VOTE_ORDER");
+		let deadUsernames = client.votes.get("DEAD_USERNAMES");
 
 		if (voteDataArray == undefined) {
 			message.channel.send("You don't have any players to kill! Setup the game first.");
@@ -54,15 +56,21 @@ module.exports = {
 			}
 		}
 
+		if (!deadUsernames)
+			deadUsernames = [];
+		deadUsernames.push(voteDataArray[byeByei][0]);
 		voteDataArray.splice(byeByei, 1); //Remove player (shit gets weird if removed while looping through loop)
 
 		//Majority
 		const playerCount = voteDataArray.length-1;
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
 
+		UtilityFunctions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
+
 		client.votes.set("VOTE_DATA", voteDataArray); 
 		client.votes.set("VOTE_ORDER", voteOrderArray); 
 		client.votes.set("MAJORITY", majority);
+		client.votes.set("DEAD_USERNAMES", deadUsernames);
 
 		var playerStrings = playerArray.toString().replace(/,/g, "\n");
 

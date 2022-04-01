@@ -51,6 +51,7 @@ module.exports = {
 		client.votes.set("VOTE_DATA", voteDataArray); 
 		client.votes.set("VOTE_ORDER", []);
 		client.votes.set("MAJORITY", majority);
+		client.votes.set("DEAD_USERNAMES", []);
 
 		message.channel.send("Game setup for " + playerCount + " players.\n*" + playerString + "*\nDefault majority set to: " + majority);
 	}

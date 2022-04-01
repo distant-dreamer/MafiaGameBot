@@ -76,7 +76,7 @@ module.exports = {
         color = votedPlayerMember.displayHexColor;
         votedAvatar = votedPlayerMember.user.avatarURL();
         let label = (isVoted) ?
-            `${message.author.username} voted for ${votedUsername}`:
+            `${message.author.username} voted for ${votedUsername}` :
             `❌ ${message.author.username} took away their vote on ${votedUsername}`;
 
         return new Discord.MessageEmbed()
@@ -85,6 +85,36 @@ module.exports = {
             .setThumbnail(votedAvatar)
             .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);
 
+    },
+
+    GetPlayerList(voteDataArray, deadUsernames) {
+        if (!deadUsernames)
+            deadUsernames = [];
+        let aliveUsernames = voteDataArray.map(p => p[0]);
+        aliveUsernames = aliveUsernames.filter(p => p != "No Lynch");
+        aliveUsernames.sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
+        deadUsernames.sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
+        return `-------- **ALIVE: ${aliveUsernames.length}** --------\n${aliveUsernames.join("\n")}\n\n` +
+            `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}`;
+    },
+
+    async UpdatePlayerList(client, message, voteDataArray, deadUsernames) {
+		let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
+		let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
+
+		let listChannel = message.guild.channels.cache.get(playerListChannelID);
+		if (listChannel) {
+			let listMessage = await listChannel.messages.fetch(playerListMessageID);
+			if (listMessage) {
+				let playerListString = this.GetPlayerList(voteDataArray, deadUsernames);
+				listMessage.edit(playerListString);
+				message.channel.send(":clipboard: Player list updated.");
+			} else {
+				message.channel.send("I couldn't find the player list Message!");
+			}
+		} else {
+			message.channel.send("I couldn't find the player list channel!");
+		}
     }
 
 }
