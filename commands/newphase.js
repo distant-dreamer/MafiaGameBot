@@ -34,6 +34,7 @@ module.exports = {
 					break;
 			}
 		}
+
 		if (isNaN(inputPhase) || inputPhase == undefined)
 			inputPhase = (inputPhaseType == PHASE_TYPE.DAY) ? gameState.phase + 1 : gameState.phase;
 		if (inputPhase == undefined)
@@ -43,6 +44,8 @@ module.exports = {
 
 		if (gameState.dms.length)
 			returnMessage += Functions.GetDms(gameState) + "\n\n";
+		if (gameState.votes.length)
+			returnMessage += Functions.GetVotes(message, gameState) + "\n\n";
 
 		gameState.phase = inputPhase;
 		gameState.phaseType = inputPhaseType;

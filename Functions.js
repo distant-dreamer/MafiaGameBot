@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const Discord = require('discord.js');
-const { ENMAP_DATABASE, PHASE_TYPE } = require("./Constants");
+const { PHASE_TYPE } = require("./Constants");
 const { Vote } = require("./Classes");
 
 module.exports = {
@@ -20,6 +20,16 @@ module.exports = {
     MatchInputToString(input, match) {
         if (!match || !input) return false;
         return match.toLowerCase().includes(input.toLowerCase());
+    },
+
+    ConvertDiscordIDToUsername(message, players, inputDiscordID) {
+        let player = players.find(p => p.discordID == inputDiscordID);
+        if (player) return player.username;
+        if (message.guild && message.guild.members) {
+            let member = message.guild.members.cache.find(m => m.id == inputDiscordID);
+            if (member) return member.user.username;
+        }
+        return "`[Unknown player]`";
     },
 
     async Pin(message) {
@@ -123,8 +133,28 @@ module.exports = {
     },
 
     GetDms(gameState) {
-        return `------DMs------\n` +
+        return `------DMs ${gameState.phaseType} ${gameState.phase}------\n` +
             `${gameState.dms.map(d => `${d.senderUsername} --> ${d.receiverUsername}`).join("\n")}`;
+    },
+
+    GetVotes(message, gameState) {
+        let voteDataString = `-----VOTE DATA ${gameState.phaseType} ${gameState.phase}-----\n`;
+        for (let vote of gameState.votes) {
+            let voterUsername = this.ConvertDiscordIDToUsername(message, gameState.players, vote.voterID);
+            let votedUsername = this.ConvertDiscordIDToUsername(message, gameState.players, vote.votedID);
+            if (vote.votedID == -1)
+                voteDataString += `**${voterUsername}** voted --> NO LYNCH\n`;
+            if (voterUsername && votedUsername)
+                voteDataString += `**${voterUsername}** voted for --> **${votedUsername}**\n`;
+        }
+
+        voteDataString += "-----IDLE-----\n";
+        for (let player of gameState.players) {
+            if (player.alive && !gameState.votes.some(v => v.voterID == player.discordID))
+                voteDataString += `**${player.username}**\n`;
+        }
+
+        return voteDataString;
     },
 
     CalculateMajority(players) {
