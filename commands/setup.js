@@ -1,58 +1,38 @@
 
 const Enmap = require("enmap");
+const { Player } = require("../Classes");
 const { prefix, token } = require('../config.json');
-const UtilityFunctions = require("../UtilityFunctions");
+const { ENMAP_DATABASE } = require("../Constants");
+const { GetStoredUserURL, GetPlayerList, SetGamestate } = require("../Functions");
 
 module.exports = {
 	name: 'setup',
-	description: 'Adds a player to the current game',
+	description: 'Adds all players under a role to the game.',
 	format: "!setup <role>",
-	guildonly: true,
-	async execute(client, message, args) {
+	notGMMessage: "I'll setup your ass.",
+	async execute(client, message, args, gameState) {
 
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("I'll setup your ass.")
-			return;
-		}
+		if (!args.length) 
+			return message.channel.send("You need to enter a role.");
+
 		let roleMembers;
+		let inputRole = args.shift(); 
+		let role = message.guild.roles.cache.find(x => x.name == inputRole);
+		if (!role) 
+			return message.channel.send(`Invalid role: ${inputRole}`);
+		roleMembers = [...role.members.values()];
 
-		const mafiaPlayerRole = message.content.replace((prefix + "setup "), "");
-		if (mafiaPlayerRole.length == 0) {
-			message.channel.send("You need to enter a role.");
-		}
-		try {
-			let role = message.guild.roles.cache.find(x => x.name == mafiaPlayerRole);
-			roleMembers = [...role.members.values()];
-		}
-		catch (error) {
-			message.channel.send("Invalid role. " + error );
-			return;
+		let players = [];
+		for (let member of roleMembers) {
+			let avatarURL = await GetStoredUserURL(client, message, member.id);
+			players.push(new Player(member.user.username, member.id, avatarURL));
 		}
 
-		var playerString = "*";
-		var voteDataArray = [];
-		for (let i in roleMembers) {
-			let user = roleMembers[i].user;
-			playerString += user.username + "\n";
-			await UtilityFunctions.GetStoredUserURL(client, message, user.id);
-			voteDataArray[i] = [roleMembers[i].user.username, 0, [""]] //playerstring, voteCount, [voters]
-		}
+		let playerList = GetPlayerList(players);
 
-		playerString += "*";
-		voteDataArray.sort();
-		voteDataArray.push(["No Lynch", 0, [""]]);
+		gameState.players = players;
+		SetGamestate(client, message, gameState);
 
-		//Majority
-		const playerCount = voteDataArray.length-1;
-		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
-
-		client.votes.set("VOTE_DATA", voteDataArray); 
-		client.votes.set("VOTE_ORDER", []);
-		client.votes.set("MAJORITY", majority);
-		client.votes.set("DEAD_USERNAMES", []);
-
-		message.channel.send("Game setup for " + playerCount + " players.\n*" + playerString + "*\nDefault majority set to: " + majority);
+		message.channel.send(`Game setup for **${players.length}**.\n\n${playerList}`);
 	}
 };

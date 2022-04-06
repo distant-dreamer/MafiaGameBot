@@ -19,7 +19,9 @@ client.commands = new Discord.Collection();
 
 //Enmap
 const Enmap = require("enmap");
-const UtiltiyFunctions = require('./UtilityFunctions');
+const UtiltiyFunctions = require('./Functions');
+const { ENMAP_DATABASE } = require('./Constants');
+const { Gamestate } = require('./Classes');
 
 client.votes = new Enmap({
 	name: "votes",
@@ -92,39 +94,21 @@ client.on('messageCreate', async message => {
 		//TO JAILOR
 		if (message.channel.id == jailCellChannelID) {
 			client.channels.cache.get(jailIntercomChannelID).send("**" + message.author.username + "**: " + message.content);
-			let vaultMessage = await message.channel.send('Sent to ???.')
-			await UtiltiyFunctions.sleep(3000);
-			vaultMessage.delete();
+			// let vaultMessage = await message.channel.send('Sent to ???.')
+			// await UtiltiyFunctions.sleep(1000);
+			// vaultMessage.delete();
 			return;
 		}
 
 		//TO JAILCELL
 		if (message.channel.id == jailIntercomChannelID) {
 			client.channels.cache.get(jailCellChannelID).send("**???:**  " + message.content);
-			let vaultMessage = await message.channel.send('Sent to hidden room')
-			await UtiltiyFunctions.sleep(3000);
-			vaultMessage.delete();
+			// let vaultMessage = await message.channel.send('Sent to hidden room')
+			// await UtiltiyFunctions.sleep(1000);
+			// vaultMessage.delete();
 			return;
 		}
 	}
-
-	/*
-	MONOKUMA
-
-	if (message.content.includes("monokuma") || message.content.includes("Monokuma")) {
-		message.channel.send("That guy is the best!");
-	}
-	if (message.content.includes("bear") || message.content.includes("Bear")) {
-		message.channel.send("Bears are awesome!");
-	}
-	if (message.content.includes("despair") || message.content.includes("Despair")) {
-		message.channel.send("Phuhuhuhuhuhuhuhu!");
-	}
-	
-	if (message.content.includes("god") && message.content.includes("bomb")) {
-		message.channel.send("A bomb!");
-	}
-	*/
 
 
 	//CHARACTER COUNT
@@ -175,131 +159,59 @@ client.on('messageCreate', async message => {
 		client.votes.set("ACTIVITY_DATA", activity_array);
 	}
 
-	//SINGUPS--------------------
+	let isGM = message.member.permissions.has('ADMINISTRATOR');
 
-
-
-	// const signupchannel = client.votes.get("SIGNUPS");
-	// //client.votes.set("SIGNUPCOUNT", 4);
-	// if (message.channel.id == signupchannel) {
-
-
-	// 	const playerMax = 20;
-
-	// 	console.log(message.author.username + " " + message.content);
-	// 	if (message.author.username[message.author.username.length-1] == message.content[0] && message.content.length == 4){
-	// 		let MafiaRole = message.guild.roles.find(r => r.name === "Mafia Players");
-	// 		let AliveRole = message.guild.roles.find(r => r.name === "Alive");
-	// 		message.member.addRole(MafiaRole).catch(console.error);
-	// 		message.member.addRole(AliveRole).catch(console.error);
-	// 		message.channel.overwritePermissions(message.member, {'SEND_MESSAGES': false} );
-	// 		message.channel.send('`Success. Welcome to Mafia Game #3, ' + message.author.username + "`");
-
-	// 		//List remaining avalibility
-	// 		var signupCount = client.votes.get("SIGNUPCOUNT");
-	// 		if (!signupCount) {
-	// 			signupCount = 1;
-	// 		} else {
-	// 			signupCount += 1;
-	// 		}
-	// 		client.votes.set("SIGNUPCOUNT", signupCount);
-	// 		var remainingSlots = playerMax - signupCount;
-	// 		message.channel.send("Number of signed up players: " + signupCount + "\nRemaining slots: " + remainingSlots);
-
-	// 		//Close channel if all slots filled
-	// 		if (remainingSlots == 0) {
-	// 			message.channel.send("All slots have been filled!");
-	// 			let perms = message.guild.roles.find(r => r.name === "has sign up perms");
-	// 			message.channel.overwritePermissions(perms, {'SEND_MESSAGES': false} );
-	// 		}
-
-	// 		return
-
-	// 	} else {
-	// 		message.channel.send('`Incorrect input`').then(msg => {msg.delete(5000)}).catch();
-	// 		message.delete();
-	// 		return;
-	// 	}
-	// }
-
-
-
-
-	/*
-
-	
-	//RELEASE THE ZOMBIES (MAFIA #3 ONLY)
-	if (message.content.includes("ET EXSURGE A MORTUIS") && message.channel.id == votechannel) {
-		const Deadrole = message.guild.roles.find(x => x.name == "Dead");
-		message.channel.overwritePermissions(Deadrole, {'SEND_MESSAGES': true} );
-		console.log("ZOMBIES RELEASED");
+	if (isGM) {
+		if (message.content == "LOCK") {
+			message.channel.permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES: false });
+			message.react("🔒");
+			return;
+		}
+		if (message.content == "UNLOCK") {
+			message.channel.permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES: true });
+			message.react("🔓");
+			return;
+		}
 	}
 
-	
-
-	
-	//SCOOBS JOJO BATTLE (MAFIA #2.5 ONLY)
-	if (message.content.includes("BREAK YOUR FACE, THAT IS") && (message.channel.id == votechannel) && (message.author.id == 216291435287150592)) {
-		message.channel.send(
-			"**TRUE SCOOBY SNACKS HAS CHALLENGED ANOTHER PLAYER!**\nBoth players now must partake in the following duel of wits:"+
-			"```THE CHALLENGE:\nEach player has two options:\n--------------------------------------\n-----------ATTACK, or SPARE-----------\n--------------------------------------\n\n"+
-			"-If both players ATTACK, both will die.\n\n-If one player SPARES and the other ATTACKS, the sparing player will die.\n\n"+
-			"-If both players SPARE, the challenge will end and no one will die.\n\n"+
-			"-The two players must submit their choice via DM to the GM before the end of the phase. It can be changed at will until the phase is locked. "+
-			"If one player fails to send an action before the end of the phase both players will die.```"
-			)
-	}
-
-	*/
-
-	//commands
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-	const args = message.content.slice(prefix.length).split(/ +/);
-	const commandName = args.shift().toLowerCase();
+	let args = message.content.slice(prefix.length).split(/ +/);
+	let commandName = args.shift().toLowerCase();
 
-	const command = client.commands.get(commandName)
+	let command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
 	if (!command) return;
 
-	//Notify if this can only be sent in guild
-	if (command.guildonly && message.channel.type === "dm")
-		return message.reply('This command cannot be sent as a DM. Send it in the server instead.');
+	if (!command.dm && message.channel.type === "dm")
+		return message.channel.send('This command cannot be sent as a DM. Send it in the server instead.');
 
-	//Notify if this can only be sent in dm
-	if (command.dmonly && message.channel.type === "text")
-		return message.reply('This command cannot be sent in the server. Send it as a DM instead.');
+	// if (command.dmonly && message.channel.type === "text")
+	// 	return message.channel.send('This command cannot be sent in the server. Send it as a DM instead.');
 
-	//COOLDOWN
-	/*
-	if (!cooldowns.has(command.name)) {
-		cooldowns.set(command.name, new Discord.Collection());
+	if (!isGM && !command.public) {
+		let notGMMessage = (command.notGMMessage) ? command.notGMMessage : "No. Only the GM can do that.";
+		return message.channel.send(notGMMessage);
 	}
 
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.name);
-	const cooldownAmount = (command.cooldown || 3) * 1000;
-
-	if (!timestamps.has(message.author.id)) {
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-	}
+	let guildID;
+	if (message.guild)
+		guildID = message.guild.id;
 	else {
-		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-		if (now < expirationTime) {
-			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`slow down! You need to wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command!`);
-		}
-
-		timestamps.set(message.author.id, now);
-		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
+		if (guildMap)
+			guildID = guildMap.get(message.author.id);
+		if (!guildID)
+			return message.channel.send(`I can't find you in any games! If this is a mistake, contact your GM.`);
 	}
-	*/
+
+	let gameState = client.votes.get(guildID);
+	if (!gameState)
+		gameState = new Gamestate();
 
 	try {
-		command.execute(client, message, args);
+		command.execute(client, message, args, gameState);
 	}
 	catch (error) {
 		console.error(error);

@@ -1,7 +1,16 @@
 const fetch = require("node-fetch");
 const Discord = require('discord.js');
+const { ENMAP_DATABASE } = require("./Constants");
 
 module.exports = {
+
+    SetGamestate(client, message, gamestate) {
+        try {
+            client.votes.set(ENMAP_DATABASE.GAMESTATE, gamestate);
+        } catch(error) {
+            message.channel.send(`:anger: Command failed. Failed to set gamestate. \`\`\`${error}\`\`\``);
+        }
+    },
 
     async sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -9,6 +18,7 @@ module.exports = {
 
     //Gets a stored URL of a player's avatar
     async GetStoredUserURL(client, message, discordID) {
+
         let isDM = message.channel.type == "DM";
         let avatars = client.votes.get("AVATARS");
         if (!avatars)
@@ -16,7 +26,7 @@ module.exports = {
         let avatarInfo = avatars.find(a => a.userDiscordID == discordID);
         let user = client.users.cache.get(discordID);
 
-        if (!user)
+        if (true)
             return message.author.defaultAvatarURL;
 
         if (isDM) {
@@ -87,34 +97,34 @@ module.exports = {
 
     },
 
-    GetPlayerList(voteDataArray, deadUsernames) {
-        if (!deadUsernames)
-            deadUsernames = [];
-        let aliveUsernames = voteDataArray.map(p => p[0]);
-        aliveUsernames = aliveUsernames.filter(p => p != "No Lynch");
-        aliveUsernames.sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
-        deadUsernames.sort((a, b) => a.localeCompare(b, undefined, {sensitivity: 'base'}));
+    GetPlayerList(players) {
+        let aliveUsernames = players.filter(p => p.alive).map(p => p.username);
+        let deadUsernames = players.filter(p => !p.alive).map(p => p.username);
+        aliveUsernames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+        deadUsernames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+        let majority = Math.ceil(aliveUsernames.length / 2.0) + (1 >> (aliveUsernames.length % 2));
         return `-------- **ALIVE: ${aliveUsernames.length}** --------\n${aliveUsernames.join("\n")}\n\n` +
-            `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}`;
+            `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}\n\n` + 
+            `**MAJORITY: ${majority}**`;
     },
 
     async UpdatePlayerList(client, message, voteDataArray, deadUsernames) {
-		let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
-		let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
+        let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
+        let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
 
-		let listChannel = message.guild.channels.cache.get(playerListChannelID);
-		if (listChannel) {
-			let listMessage = await listChannel.messages.fetch(playerListMessageID);
-			if (listMessage) {
-				let playerListString = this.GetPlayerList(voteDataArray, deadUsernames);
-				listMessage.edit(playerListString);
-				message.channel.send(":clipboard: Player list updated.");
-			} else {
-				message.channel.send("I couldn't find the player list Message!");
-			}
-		} else {
-			message.channel.send("I couldn't find the player list channel!");
-		}
+        let listChannel = message.guild.channels.cache.get(playerListChannelID);
+        if (listChannel) {
+            let listMessage = await listChannel.messages.fetch(playerListMessageID);
+            if (listMessage) {
+                let playerListString = this.GetPlayerList(voteDataArray, deadUsernames);
+                listMessage.edit(playerListString);
+                message.channel.send(":clipboard: Player list updated.");
+            } else {
+                message.channel.send("I couldn't find the player list Message!");
+            }
+        } else {
+            message.channel.send("I couldn't find the player list channel!");
+        }
     }
 
 }

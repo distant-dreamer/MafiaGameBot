@@ -1,7 +1,7 @@
 
 const Enmap = require("enmap");
 const { prefix, token } = require('../config.json');
-const UtilityFunctions = require("../UtilityFunctions");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'unkill', 
@@ -45,7 +45,7 @@ module.exports = {
 
 		deadUsernames = deadUsernames.filter(u => u != newPlayerInput);
 
-		UtilityFunctions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
+		Functions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
 
 		//Majority
 		const playerCount = voteDataArray.length-1;

@@ -1,4 +1,4 @@
-const UtilityFunctions = require("../UtilityFunctions");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'sendplayerlist',
@@ -23,7 +23,7 @@ module.exports = {
         let voteDataArray = client.votes.get("VOTE_DATA"); //array of: [player, votes, voted]
 		let deadUsernames = client.votes.get("DEAD_USERNAMES"); 
 		
-		let playerListString = UtilityFunctions.GetPlayerList(voteDataArray, deadUsernames);
+		let playerListString = Functions.GetPlayerList(voteDataArray, deadUsernames);
 		let listMessage = await playerListChannel.send(playerListString);
 		client.votes.set("PLAYER_LIST_MESSAGE_ID", listMessage.id);
 		client.votes.set("PLAYER_LIST_CHANNEL_ID", listMessage.channel.id);

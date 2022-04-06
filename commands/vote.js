@@ -2,7 +2,7 @@ const Enmap = require("enmap");
 const Discord = require('discord.js');
 const { prefix, token } = require('../config.json');
 const Permissions = require("discord.js/src/util/Permissions");
-const UtilityFunctions = require("../UtilityFunctions");
+const Functions = require("../Functions");
 
 module.exports = {
     name: 'vote',
@@ -140,7 +140,7 @@ module.exports = {
             voteOrderArray.splice(zeroPlayer_i, 1);
         }
         
-        let voteEmbed = await UtilityFunctions.GetVoteEmbed(client, message, votedUsername, sumVotes, descriptionText);
+        let voteEmbed = await Functions.GetVoteEmbed(client, message, votedUsername, sumVotes, descriptionText);
 
         //send to channel
         message.channel.send({ embeds: [voteEmbed] });

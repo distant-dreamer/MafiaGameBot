@@ -1,7 +1,7 @@
 
 const Enmap = require("enmap");
 const { prefix, token } = require('../config.json');
-const UtilityFunctions = require("../UtilityFunctions");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'kill', 
@@ -65,7 +65,7 @@ module.exports = {
 		const playerCount = voteDataArray.length-1;
 		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
 
-		UtilityFunctions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
+		Functions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
 
 		client.votes.set("VOTE_DATA", voteDataArray); 
 		client.votes.set("VOTE_ORDER", voteOrderArray); 

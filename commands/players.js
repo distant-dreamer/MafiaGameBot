@@ -1,6 +1,3 @@
-
-const Enmap = require("enmap");
-
 module.exports = {
 	name: 'players', 
 	description: 'shows playerlist and majority',
