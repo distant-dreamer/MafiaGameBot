@@ -39,12 +39,17 @@ module.exports = {
 		if (inputPhase == undefined)
 			inputPhase = 0;
 
+		let returnMessage = "";
+
+		if (gameState.dms.length)
+			returnMessage += Functions.GetDms(gameState) + "\n\n";
+
 		gameState.phase = inputPhase;
 		gameState.phaseType = inputPhaseType;
 		gameState.hammered = false;
 		gameState.votes = [];
+		gameState.dms = [];
 
-		let returnMessage;
 		let phaseLabel;
 
 		switch (gameState.phaseType) {
@@ -60,7 +65,7 @@ module.exports = {
 				let alivePlayers = gameState.players.filter(p => p.alive);
 				let majority = Functions.CalculateMajority(gameState.players);
 
-				returnMessage =
+				returnMessage += 
 					`Votes cleared for **${alivePlayers.length}** players.\n` +
 					`Majority set to: **${majority}**\n` +
 					`Prepared for **${inputPhaseType} ${inputPhase}**`
@@ -74,7 +79,7 @@ module.exports = {
 					phaseSymbolRight += "🌛";
 				}
 				phaseLabel = `**${phaseSymbolLeft} ${inputPhaseType} ${inputPhase} ${phaseSymbolRight}**`;
-				returnMessage = `It's sleepy time.\nPrepared for ${inputPhaseType} ${inputPhase}`;
+				returnMessage += `It's sleepy time.\nPrepared for ${inputPhaseType} ${inputPhase}`;
 				break;
 			default:
 				return message.channel.send(`What the heck is a ${inputPhaseType} phase?`);

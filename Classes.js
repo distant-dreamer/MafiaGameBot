@@ -9,6 +9,7 @@ class Gamestate {
         this.majority;
         this.hammered = false;
         this.votes = [];
+        this.dms = [];
         this.playerListMessageID;
         this.voteChannelID;
         this.actionLogChannelID;
@@ -36,9 +37,16 @@ class Vote {
     }
 }
 
+class Dm {
+    constructor(senderUsername, receiverUsername) {
+        this.senderUsername = senderUsername;
+        this.receiverUsername = receiverUsername;
+    }
+}
 
 module.exports = {
     Gamestate: Gamestate,
     Player: Player,
-    Vote: Vote
+    Vote: Vote,
+    Dm: Dm
 }

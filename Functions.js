@@ -17,6 +17,11 @@ module.exports = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
+    MatchInputToString(input, match) {
+        if (!match || !input) return false;
+        return match.toLowerCase().includes(input.toLowerCase());
+    },
+
     async Pin(message) {
         if (!message || message.guild.id == 859208746127589396) return;
         try {
@@ -115,6 +120,11 @@ module.exports = {
         return `-------- **ALIVE: ${aliveUsernames.length}** --------\n${aliveUsernames.join("\n")}\n\n` +
             `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}\n\n` +
             `**MAJORITY: ${majority}**`;
+    },
+
+    GetDms(gameState) {
+        return `------DMs------\n` +
+            `${gameState.dms.map(d => `${d.senderUsername} --> ${d.receiverUsername}`).join("\n")}`;
     },
 
     CalculateMajority(players) {
@@ -265,7 +275,7 @@ module.exports = {
 
             let inputUsername = args.shift().toLowerCase();
 
-            votedPlayer = gameState.players.find(p => p.username.toLowerCase().includes(inputUsername));
+            votedPlayer = gameState.players.find(p => this.MatchInputToString(inputUsername, p.username));
             if (!votedPlayer)
                 return message.channel.send(`Invalid player: ${inputUsername}`);
 
@@ -321,7 +331,6 @@ module.exports = {
             }
         }
         this.SetGameState(client, message, gameState);
-
     }
 
 }
