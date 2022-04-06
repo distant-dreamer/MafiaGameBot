@@ -2,11 +2,14 @@
 class Gamestate {
     constructor(guildID) {
         this.players = [];
+        this.gms = [];
         this.guildID = guildID;
         this.phase = undefined 
         this.phaseType = undefined;
         this.majority;
         this.hammered = false;
+        this.votes = [];
+        this.playerListMessageID;
         this.voteChannelID;
         this.actionLogChannelID;
         this.logChannelID;
@@ -26,8 +29,16 @@ class Player {
     }
 }
 
+class Vote {
+    constructor(voterID, votedID) {
+        this.voterID = voterID;
+        this.votedID = votedID;
+    }
+}
+
 
 module.exports = {
     Gamestate: Gamestate,
-    Player: Player
+    Player: Player,
+    Vote: Vote
 }

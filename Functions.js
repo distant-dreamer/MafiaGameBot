@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const Discord = require('discord.js');
-const { ENMAP_DATABASE } = require("./Constants");
+const { ENMAP_DATABASE, PHASE_TYPE } = require("./Constants");
+const { Vote } = require("./Classes");
 
 module.exports = {
 
@@ -16,6 +17,15 @@ module.exports = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
+    async Pin(message) {
+        if (!message || message.guild.id == 859208746127589396) return;
+        try {
+            message.pin();
+        } catch (error) {
+            message.channel.send(`Failed to pin. \`\`\`${error}\`\`\``);
+        }
+    },
+
     //Gets a stored URL of a player's avatar
     async GetStoredUserURL(client, message, discordID) {
 
@@ -25,8 +35,7 @@ module.exports = {
             avatars = [];
         let avatarInfo = avatars.find(a => a.userDiscordID == discordID);
         let user = client.users.cache.get(discordID);
-
-        if (true)
+        if (!user)
             return message.author.defaultAvatarURL;
 
         if (isDM) {
@@ -76,8 +85,8 @@ module.exports = {
         return newURL;
     },
 
-    async GetVoteEmbed(client, message, votedUsername, sumVotes, descriptionText, { isVoted = true } = {}) {
-        let votedPlayerMember = message.guild.members.cache.find(x => x.user.username === votedUsername);
+    async GetVoteEmbed(client, message, gameState, votedPlayer, descriptionText, { isVoted = true, isLogChannel = false } = {}) {
+        let votedPlayerMember = message.guild.members.cache.find(m => m.id === votedPlayer.discordID);
         let color = 0xFFFFFF;
         let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
 
@@ -86,15 +95,15 @@ module.exports = {
         color = votedPlayerMember.displayHexColor;
         votedAvatar = votedPlayerMember.user.avatarURL();
         let label = (isVoted) ?
-            `${message.author.username} voted for ${votedUsername}` :
-            `❌ ${message.author.username} took away their vote on ${votedUsername}`;
+            `${message.author.username} voted for ${votedPlayer.username}` :
+            `❌ ${message.author.username} took away their vote on ${votedPlayer.username}`;
+        let url = (isLogChannel) ? message.url : gameState.playerListMessageID;
 
         return new Discord.MessageEmbed()
-            .setAuthor({ name: label, iconURL: voterAvatar, url: message.url })
+            .setAuthor({ name: label, iconURL: voterAvatar, url: url })
             .setColor(color)
             .setThumbnail(votedAvatar)
-            .setTitle("-----VOTES (" + sumVotes + ")-----\n" + descriptionText);
-
+            .setTitle("-----VOTES (" + gameState.votes.length + ")-----\n" + descriptionText)
     },
 
     GetPlayerList(gameState) {
@@ -183,7 +192,136 @@ module.exports = {
 
         this.SetGameState(client, message, gameState);
         message.channel.send(returnMessage);
-    }
+    },
 
+    GetVoteListString(gameState, newVote, isUnvote) {
+        let previousVote = gameState.votes.find(v => v.voterID == newVote.voterID);
+        let listedIDs = [];
+        let voteListString = "";
+        for (let vote of gameState.votes) {
+            if (!listedIDs.includes(vote.votedID)) {
+                voteListString += this.GetVoteTalleyOfPlayer(gameState, vote.votedID, newVote, previousVote, isUnvote);
+                listedIDs.push(vote.votedID);
+            }
+        }
+        if (!gameState.votes.some(v => v.votedID == newVote.votedID))
+            voteListString += this.GetVoteTalleyOfPlayer(gameState, newVote.votedID, newVote, previousVote, isUnvote);
+        return voteListString;
+    },
+
+    GetVoteTalleyOfPlayer(gameState, votedIDToTally, newVote, previousVote, isUnvote) {
+        let votedPlayer = gameState.players.find(p => p.discordID == votedIDToTally);
+        if (!votedPlayer) return "";
+
+        let sum = gameState.votes.filter(v => v.votedID == votedIDToTally).length;
+        let accentTag = "";
+        let underscore = "";
+        let isNewVote = votedIDToTally == newVote.votedID;
+        let isOldVote = previousVote && votedIDToTally == previousVote.votedID;
+        if (!isUnvote && isNewVote) {
+            sum += 1;
+            accentTag = "**";
+        }
+        if ((!isUnvote && isOldVote) || (isUnvote && isNewVote)) {
+            sum -= 1;
+            accentTag = "*";
+        }
+        if (isNewVote)
+            underscore = "__";
+        return `${accentTag}${underscore}${votedPlayer.username}${underscore}: ${sum}${accentTag}\n`;
+    },
+
+    async PlaceVote(client, message, args, gameState, { isUnvote = false } = {}) {
+        if (!gameState.players.length)
+            return message.channel.send("The GM needs to get their shit together and setup the game.");
+
+        if (!gameState.voteChannelID)
+            return message.channel.send("The GM needs to set the voting channel!");
+
+        if (message.channel.id != gameState.voteChannelID)
+            return message.channel.send("This ain't the designated voting channel.");
+
+        if (!gameState.phaseType)
+            return message.channel.send("The GM needs to set the phase before you can vote!");
+
+        if (gameState.phaseType == PHASE_TYPE.NIGHT)
+            return message.channel.send("It's night time, go the fuck to sleep.");
+
+        let vote;
+        let votedPlayer;
+        if (isUnvote) {
+            vote = gameState.votes.find(v => v.voterID == message.author.id);
+            if (!vote)
+                return message.channel.send(`You haven't voted yet.`);
+            votedPlayer = gameState.players.find(p => p.discordID == vote.votedID);
+            if (!votedPlayer) {
+                gameState.votes = gameState.votes.filter(v => v.voterID != message.author.id);
+                Functions.SetGameState(client, message, gameState);
+                return message.channel.send(`...uh, I couldn't find whoever you voted for? Whatever, I'm removed your vote.`);
+            }
+        } else {
+            if (!args.length)
+                return message.channel.send(`You gotta vote for somebody ${message.author}`);
+
+            let inputUsername = args.shift().toLowerCase();
+
+            votedPlayer = gameState.players.find(p => p.username.toLowerCase().includes(inputUsername));
+            if (!votedPlayer)
+                return message.channel.send(`Invalid player: ${inputUsername}`);
+
+            if (!votedPlayer.alive)
+                return message.channel.send(`**${votedPlayer.username}** is already dead.`);
+
+            let previousVote = gameState.votes.find(v => v.voterID == message.author.id);
+            if (previousVote && previousVote.votedID == votedPlayer.discordID) {
+                let player = gameState.players.find(p => p.discordID == previousVote.votedID);
+                return message.channel.send(`You can't vote for **${player.username}** again!`);
+            }
+
+            if (votedPlayer.discordID == message.author.id && !gameState.votes.some(v => v.votedID == message.author.id))
+                return message.channel.send("You need to have at least one vote on you before you can vote for yourself!");
+
+            vote = new Vote(message.author.id, votedPlayer.discordID);
+        }
+
+        let voteListString = this.GetVoteListString(gameState, vote, isUnvote);
+
+        gameState.votes = gameState.votes.filter(v => v.voterID != message.author.id);
+        if (!isUnvote)
+            gameState.votes.push(vote);
+
+        let voteEmbedVoteChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, voteListString,
+            { isUnvote: isUnvote });
+        let voteEmbedLogChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, voteListString,
+            { isUnvote: isUnvote, isLogChannel: true });
+
+        let logChannel = client.channels.cache.get(gameState.logChannelID);
+        if (logChannel)
+            logChannel.send({ embeds: [voteEmbedLogChannel] });
+
+        message.channel.send({ embeds: [voteEmbedVoteChannel] });
+
+        if (!isUnvote) {
+            let voteCountForVoted = gameState.votes.filter(v => v.votedID == vote.votedID).length;
+            if (voteCountForVoted == gameState.majority && !gameState.hammered) {
+                gameState.hammered = true;
+                let returnMessage = `:hammer: **${message.author.username} has placed the hammer on ${votedPlayer.username}!**`;
+                if (logChannel)
+                    logChannel.send("🔨🔨🔨🔨🔨🔨🔨");
+                try {
+                    await message.channel.permissionOverwrites.create(vote.votedID, { SEND_MESSAGES: false });
+                    let gmsPing = gameState.gms.map(g => `<@${g}>`).join("");
+                    returnMessage += `\n${gmsPing} *${votedPlayer.username} has been locked out of ${message.channel.name} and can no loger post in this channel.*`;
+                }
+                catch (error) {
+                    returnMessage += `\nAttempt to lock hammered player out of chat falied. Just don't talk here anymore, ok ${inputUsername}?`;
+                    console.log(error);
+                }
+                message.channel.send(returnMessage);
+            }
+        }
+        this.SetGameState(client, message, gameState);
+
+    }
 
 }

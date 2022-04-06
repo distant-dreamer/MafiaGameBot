@@ -22,6 +22,7 @@ const Enmap = require("enmap");
 const UtiltiyFunctions = require('./Functions');
 const { ENMAP_DATABASE } = require('./Constants');
 const { Gamestate } = require('./Classes');
+const Functions = require('./Functions');
 
 client.votes = new Enmap({
 	name: "votes",
@@ -209,6 +210,11 @@ client.on('messageCreate', async message => {
 	let gameState = client.votes.get(guildID);
 	if (!gameState)
 		gameState = new Gamestate(guildID);
+
+	if (isGM && !gameState.gms.includes(message.author.id)) {
+		gameState.gms.push(message.author.id);
+		Functions.SetGameState(client, message, gameState);
+	}
 
 	try {
 		command.execute(client, message, args, gameState);

@@ -12,8 +12,8 @@ module.exports = {
 			return message.channel.send("You need to enter a role.");
 
 		let roleMembers;
-		let inputRole = args.shift(); 
-		let role = message.guild.roles.cache.find(x => x.name == inputRole);
+		let inputRole = args.join(" ").toLowerCase(); 
+		let role = message.guild.roles.cache.find(x => x.name.toLowerCase().includes(inputRole));
 		if (!role) 
 			return message.channel.send(`Invalid role: ${inputRole}`);
 		roleMembers = [...role.members.values()];

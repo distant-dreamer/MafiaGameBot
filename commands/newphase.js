@@ -34,12 +34,15 @@ module.exports = {
 					break;
 			}
 		}
-		if (isNaN(inputPhase))
+		if (isNaN(inputPhase) || inputPhase == undefined)
 			inputPhase = (inputPhaseType == PHASE_TYPE.DAY) ? gameState.phase + 1 : gameState.phase;
+		if (inputPhase == undefined)
+			inputPhase = 0;
 
 		gameState.phase = inputPhase;
 		gameState.phaseType = inputPhaseType;
 		gameState.hammered = false;
+		gameState.votes = [];
 
 		let returnMessage;
 		let phaseLabel;
@@ -81,16 +84,13 @@ module.exports = {
 		let actionLogChannel = client.channels.cache.get(gameState.actionLogChannelID);
 		if (logChannel) {
 			let logChannelMessage = await logChannel.send(phaseLabel);
-			if (logChannelMessage) {
-				logChannelMessage.pin();
-			}
+			Functions.Pin(logChannelMessage);
 		}
 		if (actionLogChannel) {
 			let actionLogChannelMessage = await actionLogChannel.send(phaseLabel);
-			if (actionLogChannelMessage) {
-				actionLogChannelMessage.pin();
-			}
+			Functions.Pin(actionLogChannelMessage);
 		}
+		Functions.Pin(message)
 
 		Functions.SetGameState(client, message, gameState);
 		message.channel.send(returnMessage);
