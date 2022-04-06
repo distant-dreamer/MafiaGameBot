@@ -4,6 +4,12 @@ class Gamestate {
     constructor(guildID) {
         this.players = [];
         this.guildID = guildID;
+        this.voteChannelID;
+        this.actionLogChannelID;
+        this.logChannelID;
+        this.vaultChannelID;
+        this.jailIntercomChannelID;
+        this.jailCellChannelID;
     }
 }
 

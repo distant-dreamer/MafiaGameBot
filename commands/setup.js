@@ -3,7 +3,7 @@ const Enmap = require("enmap");
 const { Player } = require("../Classes");
 const { prefix, token } = require('../config.json');
 const { ENMAP_DATABASE } = require("../Constants");
-const { GetStoredUserURL, GetPlayerList, SetGamestate } = require("../Functions");
+const { GetStoredUserURL, GetPlayerList, SetGameState: SetGamestate } = require("../Functions");
 
 module.exports = {
 	name: 'setup',

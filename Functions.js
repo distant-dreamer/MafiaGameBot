@@ -4,10 +4,10 @@ const { ENMAP_DATABASE } = require("./Constants");
 
 module.exports = {
 
-    SetGamestate(client, message, gameState) {
+    SetGameState(client, message, gameState) {
         try {
             client.votes.set(gameState.guildID, gameState);
-        } catch(error) {
+        } catch (error) {
             message.channel.send(`:anger: Command failed. Failed to set gamestate. \`\`\`${error}\`\`\``);
         }
     },
@@ -104,7 +104,7 @@ module.exports = {
         deadUsernames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
         let majority = Math.ceil(aliveUsernames.length / 2.0) + (1 >> (aliveUsernames.length % 2));
         return `-------- **ALIVE: ${aliveUsernames.length}** --------\n${aliveUsernames.join("\n")}\n\n` +
-            `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}\n\n` + 
+            `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}\n\n` +
             `**MAJORITY: ${majority}**`;
     },
 
@@ -125,6 +125,60 @@ module.exports = {
         } else {
             message.channel.send("I couldn't find the player list channel!");
         }
+    },
+
+    SetGameChannel(client, message, args, gameState, commandName) {
+        let channelID = (args.length) ? args.shift() : message.channel.id;
+        let channel = client.channels.cache.get(channelID);
+        if (!channel)
+            return message.channel.send(`Unknown channel with ID: ${channelID}`);
+
+        let notificationMessage;
+        let returnMessage;
+        switch (commandName) {
+            case "votechannel":
+                gameState.voteChannelID = channelID;
+                notificationMessage = "Voting happens here!";
+                returnMessage = `Voting channel set to: ${channel.toString()}`;
+                break;
+            case "actionlog":
+                gameState.actionLogChannelID = channelID;
+                notificationMessage = "What will they do? Where will they go? Find out here!";
+                returnMessage = `Action Log set to: ${channel.toString()}`;
+                break;
+            case "log":
+                gameState.logChannelID = channelID;
+                notificationMessage = "This log channel is so designated.";
+                returnMessage = `Log Channel set to: ${channel.toString()}`;
+                break;
+            case "vault":
+                gameState.vaultChannelID = channelID;
+                notificationMessage = "The vault is locked and ready for secrets.";
+                returnMessage = `Vault set to: ${channel.toString()}`;
+                break;
+            case "jailcell":
+                gameState.jailCellChannelID = channelID;
+                notificationMessage = "This is the jail cell. The jailor can hear you...";
+                returnMessage = `Jail Cell set to: ${channel.toString()}`;
+                break;
+            case "jailintercom":
+                gameState.jailIntercomChannelID = channelID;
+                notificationMessage = "This is the jail intercom. You can talk to whomever is in the jail cell here.";
+                returnMessage = `Jail Intercom set to: ${channel.toString()}`;
+                break;
+            default:
+                return message.channel.send(`Internal Error: Unimplemented commandName: ${commandName}`);
+        }
+        try {
+            channel.send(notificationMessage);
+        }
+        catch (error) {
+            return message.channel.send("The bot doesn't have access to post in that channel!");
+        }
+
+        this.SetGameState(client, message, gameState);
+        message.channel.send(returnMessage);
     }
+
 
 }

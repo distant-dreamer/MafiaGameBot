@@ -159,7 +159,7 @@ client.on('messageCreate', async message => {
 		client.votes.set("ACTIVITY_DATA", activity_array);
 	}
 
-	let isGM = message.member.permissions.has('ADMINISTRATOR');
+	let isGM = (message.member && message.member.permissions.has('ADMINISTRATOR'));
 
 	if (isGM) {
 		if (message.content == "LOCK") {
@@ -215,7 +215,7 @@ client.on('messageCreate', async message => {
 	}
 	catch (error) {
 		console.error(error);
-		message.reply(`There was an error trying to execute that command!\`\`\`${error}\`\`\``);
+		message.channel.send(`There was an error trying to execute that command!\`\`\`${error}\`\`\``);
 	}
 });
 
