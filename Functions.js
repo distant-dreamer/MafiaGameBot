@@ -4,9 +4,9 @@ const { ENMAP_DATABASE } = require("./Constants");
 
 module.exports = {
 
-    SetGamestate(client, message, gamestate) {
+    SetGamestate(client, message, gameState) {
         try {
-            client.votes.set(ENMAP_DATABASE.GAMESTATE, gamestate);
+            client.votes.set(gameState.guildID, gameState);
         } catch(error) {
             message.channel.send(`:anger: Command failed. Failed to set gamestate. \`\`\`${error}\`\`\``);
         }

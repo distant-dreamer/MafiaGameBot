@@ -2,15 +2,8 @@ module.exports = {
 	name: 'actionlog',
 	description: 'Sets the action log channel',
 	format: "!actionlog <channelid>",
-	guildonly: true,
-	adminonly: true,
+	notGMMessage: "You know what rhymes with action log? Action pog!",
 	execute(client, message, args) {
-
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("You know what rhymes with action log? Action pog!")
-			return;
-		}
 
 		const actionLogChannelID = args[0];
 		

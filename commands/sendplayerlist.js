@@ -4,12 +4,8 @@ module.exports = {
 	name: 'sendplayerlist',
 	description: 'Sends a playerlist to the specified channel. The bot will keep the playerlist updated throughout the game as you use the !kill command.',
 	format: "!sendplayerlist <channelID>",
+	notGMMessage: "No player list for you.",
 	async execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) 
-			return message.channel.send("No player list for you.");
 
 		if (!args.length)
 			return message.channel.send("Please insert a channel ID to send the player list in");

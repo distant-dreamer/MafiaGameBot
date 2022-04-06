@@ -4,13 +4,12 @@ const Enmap = require("enmap");
 module.exports = {
 	name: 'vault',
 	description: 'Sets the secretvault channel',
-	guildonly: true,
+	notGMMessage: "You leave the vault channel alone.",
 	execute(client, message, args) {
-
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
-			message.channel.send("You leave the vault channel alone.")
+			message.channel.send("")
 			return;
 		}
 

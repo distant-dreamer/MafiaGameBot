@@ -5,13 +5,13 @@ module.exports = {
 	name: 'log',
 	description: 'Sets the log channel',
 	format: '!log <channelid>',
-	guildonly: true,
+	notGMMessage: "You leave the designated log channel alone.",
 	execute(client, message, args) {
 
 		//Check that the GM is giving command.
 		const gm = client.votes.get("GM");
 		if (!gm.includes(message.author.id)) {
-			message.channel.send("You leave the designated log channel alone.")
+			message.channel.send("")
 			return;
 		}
 

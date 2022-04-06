@@ -6,7 +6,6 @@ module.exports = {
 	aliases: ['obj'],
 	description: 'Sets the secretvault channel',
 	format: "!objection",
-	guildonly: true,
 	execute(client, message, args) {
 
 

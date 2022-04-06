@@ -6,7 +6,7 @@ module.exports = {
     name: 'unvote',
     description: 'Removes vote from player',
     format: "!unvote <player>",
-    guildonly: true,
+    public: true,
     async execute(client, message, args) {
          
         var phaseType = client.votes.get("PHASE"); //[phaseType, phaseNum]

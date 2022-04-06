@@ -4,7 +4,6 @@ const Enmap = require("enmap");
 module.exports = {
 	name: 'aamode',
 	description: 'Sets the secretvault channel',
-	guildonly: true,
 	execute(client, message, args, votes) {
 
 

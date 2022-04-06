@@ -6,7 +6,6 @@ module.exports = {
 	aliases: ['tt', 'tthat'],
 	description: 'Sets the secretvault channel',
 	format: "!takethat",
-	guildonly: true,
 	execute(client, message, args) {
 
 

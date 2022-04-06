@@ -5,15 +5,8 @@ module.exports = {
 	name: 'printdata',
 	description: 'Shows internal data',
 	format: "!printdata",
-	guildonly: true,
+	notGMMessage: "That DATA is not for you.",
 	execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("The DATA is not for you.")
-			return;
-		}
 
 		keyArray = client.votes.indexes
         const dataMap = client.votes.fetch(keyArray);

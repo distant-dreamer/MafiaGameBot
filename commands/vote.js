@@ -8,7 +8,7 @@ module.exports = {
     name: 'vote',
     description: 'Votes for a player',
     format: "!vote <player>",
-    guildonly: true,
+    public: true,
     async execute(client, message, args) {
         //Check if it's day
 

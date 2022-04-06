@@ -4,14 +4,14 @@ module.exports = {
 	name: 'night',
 	description: 'Sends an night action to the GM',
 	format: "!Night X, your action",
-	dmonly: true,
+	notGMMessage: "You don't get to start the phase, buddy.",
+	public: true,
 	execute(client, message, args) {
 		
 		actionLogChannelID = client.votes.get("ACTION_LOG");
 
-		if (actionLogChannelID == undefined) {
+		if (actionLogChannelID == undefined) 
 			return message.channel.send("The GM needs to set the action log!");
-		}
 
 		const action = message.content.slice(1);
 

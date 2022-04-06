@@ -4,15 +4,10 @@ const Enmap = require("enmap");
 module.exports = {
 	name: 'mod',
 	description: 'Gives a player control over the bot (use for joint moderation or a tech helper)',
-	guildonly: true,
+	notGMMessage: "I'll mod your ass.",
 	execute(client, message, args) {
 
 		const gm = client.votes.get("GM");
-
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("I'll mod your ass.");
-			return;
-		}
 
 		if (!args.length) {
 			return message.channel.send("What? I need a user id.")

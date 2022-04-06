@@ -7,20 +7,14 @@ module.exports = {
 	name: 'unkill', 
 	description: 'adds a player to the playerlist',
 	format: "!unkill <player>",
-	guildonly: true,
+	notGMMessage: "You do not have the power over life and death, simpleton.",
 	execute(client, message, args) {
 
 		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
 		let deadUsernames = client.votes.get("DEAD_USERNAMES");
 		let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
 		let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
-
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("You do not have the power over life and death, simpleton.");
-			return;
-		}
 
 		if (voteDataArray == undefined) {
 			message.channel.send("You need to setup the game before you can do that.");

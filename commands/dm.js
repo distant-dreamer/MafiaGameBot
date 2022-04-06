@@ -6,7 +6,7 @@ module.exports = {
 	name: 'dm',
 	description: 'allows players to DM each other',
 	format: "!dm",
-	guildonly: true,
+	public: true,
 	execute(client, message, args) {
 
 		if (!client.votes.get("DMLIST")) {

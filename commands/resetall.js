@@ -5,22 +5,10 @@ module.exports = {
 	name: 'resetall',
 	description: 'Releases gm control',
 	format: "!resetall",
-	guildonly: true,
+	notGMMessage: "Ha. Very funny. No.",
 	execute(client, message, args) {
 
-		//Check that the GM is giving command.
 		client.votes.fetchEverything();
-
-		///*
-
-		const gm = client.votes.get("GM");
-
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("Only the Gamemaster can use this command.")
-			return;
-		}
-
-		//*/
 
 		const keys = client.votes.indexes;
 		for (i in keys) {

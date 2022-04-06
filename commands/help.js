@@ -8,8 +8,8 @@ module.exports = {
 	name: 'help',
 	description: 'Makes the message sender the GM of the game',
 	format: "!help, !help <command>",
-	guildonly: true,
-	execute(client, message, args) {
+	public: true,
+	execute(client, message, args, gameState) {
 
 		const gm = client.votes.get("GM");
 

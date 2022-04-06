@@ -198,7 +198,7 @@ client.on('messageCreate', async message => {
 	let guildID;
 	if (message.guild)
 		guildID = message.guild.id;
-	else {
+	if (!guildID) {
 		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
 		if (guildMap)
 			guildID = guildMap.get(message.author.id);
@@ -208,7 +208,7 @@ client.on('messageCreate', async message => {
 
 	let gameState = client.votes.get(guildID);
 	if (!gameState)
-		gameState = new Gamestate();
+		gameState = new Gamestate(guildID);
 
 	try {
 		command.execute(client, message, args, gameState);

@@ -5,19 +5,9 @@ module.exports = {
 	name: 'newphase', 
 	description: 'clears vote count. Argument sets majority',
 	format: "!newphase <day/night> <phase#>",
-	guildonly: true,
+	notGMMessage: "You don't get to start the phase, buddy.",
 	execute(client, message, args) {
 
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("You don't get to start the phase, buddy.")
-			return;
-		}
-		if (gm == undefined) {
-			message.channel.send("Are you the gm? Run !gm first.");
-			return;
-		}
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
 		var voteOrderArray = client.votes.get("VOTE_ORDER");
 		const logChannelID = client.votes.get("LOG"); //Log

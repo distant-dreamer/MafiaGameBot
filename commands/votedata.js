@@ -5,15 +5,8 @@ module.exports = {
 	name: 'votedata', 
 	description: 'adds a player to the playerlist',
 	format: "!votedata",
-	guildonly: true,
+	notGMMessage: "You don't get to have that **DATA**.",
 	execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("You don't get to have that **DATA**.");
-			return;
-		}
 
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, [voters]]
 

@@ -5,15 +5,8 @@ module.exports = {
 	name: 'jailintercom',
 	description: 'Sets the jail intercom channel',
 	format: "!jailintercom <channelid>",
-	guildonly: true,
+	notGMMessage: "You leave the designated jail intercom alone.",
 	execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("You leave the designated jail intercom alone.")
-			return;
-		}
 
 		const jailCellChannelID = args.shift();
 		const jailIntercomChannel = client.channels.cache.get(jailCellChannelID);

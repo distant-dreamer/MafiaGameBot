@@ -1,8 +1,9 @@
 
 
 class Gamestate {
-    constructor() {
+    constructor(guildID) {
         this.players = [];
+        this.guildID = guildID;
     }
 }
 

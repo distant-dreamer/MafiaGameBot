@@ -6,15 +6,8 @@ module.exports = {
 	name: 'printdm',
 	description: 'allows players to DM each other',
 	format: "!printdm",
-	guildonly: true,
+	notGMMessage: "Can't do that chief.",
 	execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("Can't do that chief.")
-			return;
-		}
 
 		if (!client.votes.get("DMLIST")) {
 			var dm_list = []

@@ -6,7 +6,6 @@ module.exports = {
 	aliases: ['hold', 'shutup'],
 	description: 'Sets the secretvault channel',
 	format: "!holdit",
-	guildonly: true,
 	execute(client, message, args) {
 
 

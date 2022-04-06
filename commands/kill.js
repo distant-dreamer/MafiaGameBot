@@ -7,15 +7,8 @@ module.exports = {
 	name: 'kill', 
 	description: 'kills a player and resets majority',
 	format: "!kill <player>",
-	guildonly: true,
+	notGMMessage: "Ah...if it were only that easy.",
 	async execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("Ah...if it were only that easy.");
-			return;
-		}
 
 		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
 		var voteOrderArray = client.votes.get("VOTE_ORDER");

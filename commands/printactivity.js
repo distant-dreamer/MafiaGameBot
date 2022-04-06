@@ -6,15 +6,8 @@ module.exports = {
 	name: 'printactivity',
 	description: 'Shows activity analysis',
 	format: "!printactivity",
-	guildonly: true,
+	notGMMessage: "That DATA is not for you.",
 	execute(client, message, args) {
-
-		//Check that the GM is giving command.
-		const gm = client.votes.get("GM");
-		if (!gm.includes(message.author.id)) {
-			message.channel.send("That DATA is not for you.")
-			return;
-		}
 
 		keyArray = client.votes.indexes
 		const activity_array = client.votes.get("ACTIVITY_DATA");
