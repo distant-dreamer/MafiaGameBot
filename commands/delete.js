@@ -4,29 +4,26 @@ const { prefix, token } = require('../config.json');
 const Functions = require("../Functions");
 
 module.exports = {
-	name: 'kill', 
-	description: 'Kills a player and resets majority.',
-	format: "!kill <player>",
-	notGMMessage: "Ah...if it were only that easy.",
+	name: 'delete', 
+	description: 'Deletes a player from the game',
+	format: "!delete <player>",
+	notGMMessage: "How would *you* like to be deleted instead?",
 	async execute(client, message, args, gameState) {
 
 		if (!gameState.players.length) 
-			return message.channel.send("Kill? Kill who? You have no players!");
+			return message.channel.send("There's nobody left to delete.\n\nYou monster...");
 
 		if (!args.length)
-			return message.channel.send("Please include a player to kill.");
+			return message.channel.send("Please include a player to delete from the game.");
 
 		let player = Functions.GetPlayerFromInput(message, args.shift(), gameState.players);
 		if (!player) return;
 
-		if (!player.alive)
-			return message.channel.send(`No! Nooo!! Stop!! **${player.username}** is already dead!`);
-
-		player.alive = false;
+		gameState.players = gameState.players.filter(p => p.discordID != player.discordID);
 		gameState.majority = Functions.CalculateMajority(gameState.players);
 		Functions.SetGameState(client, message, gameState);
 
 		let playerListString = await Functions.UpdatePlayerList(message, gameState);
-		message.channel.send(`Bye bye **${player.username}**!\n\n${playerListString}`);
+		message.channel.send(`So long **${player.username}**. You will be missed.\n\n${playerListString}`);
 	}
 };

@@ -17,9 +17,18 @@ module.exports = {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    MatchInputToString(input, match) {
-        if (!match || !input) return false;
-        return match.toLowerCase().includes(input.toLowerCase());
+    GetPlayerFromInput(message, inputUsername, players) {
+        if (!inputUsername) {
+            message.channel.send("Please enter a player");
+            return null;
+        }
+        inputUsername = inputUsername.toLowerCase();
+        let player = players.find(p => p.username.toLowerCase().includes(inputUsername));
+        if (!player) {
+            message.channel.send(`Invalid player: ${inputUsername}`);
+            return null;
+        }
+        return player;
     },
 
     ConvertDiscordIDToUsername(message, players, inputDiscordID) {
@@ -112,7 +121,8 @@ module.exports = {
         let label = (isVoted) ?
             `${message.author.username} voted for ${votedPlayer.username}` :
             `❌ ${message.author.username} took away their vote on ${votedPlayer.username}`;
-        let url = (isLogChannel) ? message.url : gameState.playerListMessageID;
+
+        let url = (isLogChannel) ? message.url : gameState.playerListMessageURL;
 
         return new Discord.MessageEmbed()
             .setAuthor({ name: label, iconURL: voterAvatar, url: url })
@@ -162,23 +172,23 @@ module.exports = {
         return Math.ceil(alive.length / 2.0) + (1 >> (alive.length % 2));
     },
 
-    async UpdatePlayerList(client, message, voteDataArray, deadUsernames) {
-        let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
-        let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
-
-        let listChannel = message.guild.channels.cache.get(playerListChannelID);
+    async UpdatePlayerList(message, gameState) {
+        message.channel.sendTyping();
+        let listChannel = message.guild.channels.cache.get(gameState.playerListChannelID);
+        let playerListString = "";
         if (listChannel) {
-            let listMessage = await listChannel.messages.fetch(playerListMessageID);
+            let listMessage = await listChannel.messages.fetch(gameState.playerListMessageID);
             if (listMessage) {
-                let playerListString = this.GetPlayerList(voteDataArray, deadUsernames);
+                playerListString = this.GetPlayerList(gameState);
                 listMessage.edit(playerListString);
-                message.channel.send(":clipboard: Player list updated.");
+                message.channel.send(`:clipboard: Player list in ${listChannel.toString()} updated.`);
             } else {
                 message.channel.send("I couldn't find the player list Message!");
             }
         } else {
             message.channel.send("I couldn't find the player list channel!");
         }
+        return playerListString;
     },
 
     SetGameChannel(client, message, args, gameState, commandName) {
@@ -303,11 +313,8 @@ module.exports = {
             if (!args.length)
                 return message.channel.send(`You gotta vote for somebody ${message.author}`);
 
-            let inputUsername = args.shift().toLowerCase();
-
-            votedPlayer = gameState.players.find(p => this.MatchInputToString(inputUsername, p.username));
-            if (!votedPlayer)
-                return message.channel.send(`Invalid player: ${inputUsername}`);
+            votedPlayer = this.GetPlayerFromInput(message, args.shift(), gameState.players);
+            if (!votedPlayer) return;
 
             if (!votedPlayer.alive)
                 return message.channel.send(`**${votedPlayer.username}** is already dead.`);
@@ -354,7 +361,7 @@ module.exports = {
                     returnMessage += `\n${gmsPing} *${votedPlayer.username} has been locked out of ${message.channel.name} and can no loger post in this channel.*`;
                 }
                 catch (error) {
-                    returnMessage += `\nAttempt to lock hammered player out of chat falied. Just don't talk here anymore, ok ${inputUsername}?`;
+                    returnMessage += `\nAttempt to lock hammered player out of chat falied. Just don't talk here anymore, ok ${votedPlayer.username}?`;
                     console.log(error);
                 }
                 message.channel.send(returnMessage);

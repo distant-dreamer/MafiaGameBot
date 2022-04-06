@@ -11,17 +11,14 @@ module.exports = {
 	public: true,
 	execute(client, message, args, gameState) {
 
-		if (!args.length) 
-            return message.channel.send(`Ok. You're DMing nobody. Got it.`);
+		if (!args.length)
+			return message.channel.send(`Ok. You're DMing nobody. Got it.`);
 
-		let inputUsername = args.shift(); 
-
-		let dmedPlayer = gameState.players.find(p => Functions.MatchInputToString(inputUsername, p.username));
-		if (!dmedPlayer)
-        	return message.channel.send("Invalid player.")
+		let dmedPlayer = Functions.GetPlayerFromInput(message, args.shift(), gameState.players);
+		if (!dmedPlayer) return;
 
 		let dm = new Dm(message.author.username, dmedPlayer.username);
-	
+
 		if (gameState.dms.some(d => d.senderUsername == dm.senderUsername && d.receiverUsername == dm.receiverUsername))
 			return message.channel.send(`You're already DMing ${dmedPlayer.username}`);
 

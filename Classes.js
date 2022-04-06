@@ -10,7 +10,9 @@ class Gamestate {
         this.hammered = false;
         this.votes = [];
         this.dms = [];
+        this.playerListMessageURL;
         this.playerListMessageID;
+        this.playerListChannelID;
         this.voteChannelID;
         this.actionLogChannelID;
         this.logChannelID;

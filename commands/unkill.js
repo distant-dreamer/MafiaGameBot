@@ -1,56 +1,36 @@
 
 const Enmap = require("enmap");
+const { Player } = require("../Classes");
 const { prefix, token } = require('../config.json');
 const Functions = require("../Functions");
 
 module.exports = {
-	name: 'unkill', 
-	description: 'adds a player to the playerlist',
+	name: 'unkill',
+	description: 'Adds a player to the Alive playerlist. Can be a dead player or anyone in the server.',
 	format: "!unkill <player>",
 	notGMMessage: "You do not have the power over life and death, simpleton.",
-	execute(client, message, args) {
+	async execute(client, message, args, gameState) {
 
-		//Check that the GM is giving command.
-		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
-		let deadUsernames = client.votes.get("DEAD_USERNAMES");
-		let playerListMessageID = client.votes.get("PLAYER_LIST_MESSAGE_ID");
-		let playerListChannelID = client.votes.get("PLAYER_LIST_CHANNEL_ID");
+		if (!args.length)
+			return message.channel.send("Please include a player to bring to life. It can be anyone in the server.");
 
-		if (voteDataArray == undefined) {
-			message.channel.send("You need to setup the game before you can do that.");
-			return;
+		let inputUsername = args.shift().toLowerCase();
+		let player = gameState.players.find(p => !p.alive && p.username.toLowerCase().includes(inputUsername));
+		if (!player) {
+			let member = message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(inputUsername));
+			if (!member)
+				return message.channel.send(`No player found mathching input: **${inputUsername}**`);
+			if (gameState.players.some(p => p.discordID == member.id))
+				return message.channel.send(`**${member.user.username}** is already alive and in the game. I'm not adding them again!`);
+			let avatarURL = await Functions.GetStoredUserURL(client, message, member.id);
+			player = new Player(member.user.username, member.id, avatarURL);
+			gameState.players.push(player);
 		}
+		player.alive = true;
+		gameState.majority = Functions.CalculateMajority(gameState.players);
+		Functions.SetGameState(client, message, gameState);
 
-		var newPlayerInput = message.content.replace(prefix+"unkill ", "");
-
-		let player = message.guild.members.cache.find(m => m.user.username.toLowerCase() == newPlayerInput.toLowerCase());
-		if (!player)
-			return message.channel.send(`No player found mathching input: **${newPlayerInput}** (your input must be exact to their username)`);
-
-		voteDataArray.push([newPlayerInput, 0, [""]]); //Add player
-		voteDataArray.sort();
-
-		var playerArray = [];
-		for (var i in voteDataArray) {
-			if (voteDataArray[i][0] != "No Lynch") {
-				playerArray.push(voteDataArray[i][0]);
-			}	
-		}
-
-		deadUsernames = deadUsernames.filter(u => u != newPlayerInput);
-
-		Functions.UpdatePlayerList(client, message, voteDataArray, deadUsernames);
-
-		//Majority
-		const playerCount = voteDataArray.length-1;
-		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
-		
-		client.votes.set("VOTE_DATA", voteDataArray); 
-		client.votes.set("MAJORITY", majority);
-
-		var playerStrings = playerArray.toString().replace(/,/g, "\n");
-
-		message.channel.send(newPlayerInput + " has been given new life.\n__Current Players (" + playerCount + "):__ \n*" + playerStrings + "*\nMajority has been readjusted to: " + majority);
-		
+		let playerListString = await Functions.UpdatePlayerList(message, gameState);
+		message.channel.send(`**${player.username}** has been given new life!\n\n${playerListString}`);
 	}
 };

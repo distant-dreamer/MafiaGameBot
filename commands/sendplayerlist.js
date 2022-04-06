@@ -5,7 +5,7 @@ module.exports = {
 	description: 'Sends a playerlist to the specified channel. The bot will keep the playerlist updated throughout the game as you use the !kill command.',
 	format: "!sendplayerlist <channelID>",
 	notGMMessage: "No player list for you.",
-	async execute(client, message, args) {
+	async execute(client, message, args, gameState) {
 
 		if (!args.length)
 			return message.channel.send("Please insert a channel ID to send the player list in");
@@ -16,14 +16,14 @@ module.exports = {
 		if (!playerListChannel)
 			return message.channel.send("Unknown channel ID");
 
-        let voteDataArray = client.votes.get("VOTE_DATA"); //array of: [player, votes, voted]
-		let deadUsernames = client.votes.get("DEAD_USERNAMES"); 
-		
-		let playerListString = Functions.GetPlayerList(voteDataArray, deadUsernames);
+		let playerListString = Functions.GetPlayerList(gameState);
 		let listMessage = await playerListChannel.send(playerListString);
-		client.votes.set("PLAYER_LIST_MESSAGE_ID", listMessage.id);
-		client.votes.set("PLAYER_LIST_CHANNEL_ID", listMessage.channel.id);
 
-		message.channel.send("Player list sent!");
+		gameState.playerListMessageID = listMessage.id;
+		gameState.playerListMessageURL = listMessage.url;
+		gameState.playerListChannelID = listMessage.channel.id;
+		Functions.SetGameState(client, message, gameState);
+
+		message.channel.send(`Player list sent to ${playerListChannel.toString()}`);
 	},
 };
