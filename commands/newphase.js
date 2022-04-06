@@ -1,75 +1,98 @@
-
-const Enmap = require("enmap");
+const { PHASE_TYPE } = require("../Constants");
+const Functions = require("../Functions");
 
 module.exports = {
-	name: 'newphase', 
-	description: 'clears vote count. Argument sets majority',
-	format: "!newphase <day/night> <phase#>",
+	name: 'newphase',
+	description: 'Prepares the next DAY or NIGHT phase. Insert no arguments to process to the next phase automatically.',
+	format: "!newphase [day/night] [phase#]",
+	aliases: ["nextphase"],
 	notGMMessage: "You don't get to start the phase, buddy.",
-	execute(client, message, args) {
+	async execute(client, message, args, gameState) {
 
-		var voteDataArray = client.votes.get("VOTE_DATA"); //[player, votes, voter]
-		var voteOrderArray = client.votes.get("VOTE_ORDER");
-		const logChannelID = client.votes.get("LOG"); //Log
-		var phaseType = args[0].toUpperCase();; //Day or night
-		var phaseNum = Number(args[1]); //Phase count
+		if (!gameState.players.length)
+			return message.channel.send("You have no players! You need to run `!setup` first before you can start the phase.");
+		if (!gameState.logChannelID)
+			return message.channel.send("You need to set the log channel first with `!log`");
+		if (!gameState.voteChannelID)
+			return message.channel.send("You need to set the vote channel first with `!votechannel`");
+		if (!gameState.actionLogChannelID)
+			return message.channel.send("You need to set the action log channel first with `!actionlog`");
 
-		if (phaseType == undefined) {
-			message.channel.send("Please provide info for what phase to begin.");
-			return;
+		let inputPhaseType = args.shift();
+		if (inputPhaseType)
+			inputPhaseType = inputPhaseType.toUpperCase();
+		let inputPhase = Number(args.shift());
+
+		if (inputPhaseType == undefined) {
+			switch (gameState.phaseType) {
+				case undefined:
+				case PHASE_TYPE.DAY:
+					inputPhaseType = PHASE_TYPE.NIGHT;
+					break;
+				case PHASE_TYPE.NIGHT:
+					inputPhaseType = PHASE_TYPE.DAY;
+					break;
+			}
 		}
-		if (phaseNum == undefined) {
-			message.channel.send("Please provide a phase number.");
-			return;
-		}
-		if (voteDataArray == undefined) {
-			message.channel.send("You need to run \"!setup\" before you can start the phase.");
-			return;
-		}
-		if (logChannelID == undefined) {
-			message.channel.send("<@" + gm[0] + ">, you need to set the log channel!");
-			return;
-		}
+		if (isNaN(inputPhase))
+			inputPhase = (inputPhaseType == PHASE_TYPE.DAY) ? gameState.phase + 1 : gameState.phase;
 
-		//Majority
-		const playerCount = voteDataArray.length-1;
-		const majority = Math.ceil(playerCount/2.0) + (1 >> (playerCount%2));
+		gameState.phase = inputPhase;
+		gameState.phaseType = inputPhaseType;
+		gameState.hammered = false;
 
-		switch(phaseType) {
-			case "DAY":
-				for (const i in voteDataArray) {
-					voteDataArray[i][1] = 0; //clear vote
-					voteDataArray[i][2] = []; //clear voters
-				}
+		let returnMessage;
+		let phaseLabel;
 
-				var numSuns = "";
-				while (numSuns.length < phaseNum) {
-					numSuns += "☀";
-				}
+		switch (gameState.phaseType) {
+			case PHASE_TYPE.DAY:
 
-			    client.channels.cache.get(logChannelID).send("**" + numSuns + phaseType + " " + phaseNum + numSuns + "**");
+				//TODO: clear votes
 
-				message.channel.send("Votes cleared for " + playerCount + " players.\nDefault majority set to: " + majority + "\nPrepared for " + phaseType + " " + phaseNum);
+				let phaseSymbol = "";
+				while (phaseSymbol.length < inputPhase)
+					phaseSymbol += "☀";
+				phaseLabel = `**${phaseSymbol} ${inputPhaseType} ${inputPhase} ${phaseSymbol}**`;
 
-				voteOrderArray = new Array;
+				let alivePlayers = gameState.players.filter(p => p.alive);
+				let majority = Functions.CalculateMajority(gameState.players);
+
+				returnMessage =
+					`Votes cleared for **${alivePlayers.length}** players.\n` +
+					`Majority set to: **${majority}**\n` +
+					`Prepared for **${inputPhaseType} ${inputPhase}**`
 
 				break;
-			case "NIGHT":
-				message.channel.send("It's sleepy time.\nPrepared for " + phaseType + " " + args[1]);
+			case PHASE_TYPE.NIGHT:
+				let phaseSymbolLeft = "";
+				let phaseSymbolRight = "";
+				while (phaseSymbolLeft.length < inputPhase) {
+					phaseSymbolLeft += "🌜";
+					phaseSymbolRight += "🌛";
+				}
+				phaseLabel = `**${phaseSymbolLeft} ${inputPhaseType} ${inputPhase} ${phaseSymbolRight}**`;
+				returnMessage = `It's sleepy time.\nPrepared for ${inputPhaseType} ${inputPhase}`;
 				break;
-
 			default:
-				message.channel.send("What the heck is a " + phaseType + " phase?");
-				return;
-				break;
+				return message.channel.send(`What the heck is a ${inputPhaseType} phase?`);
 		}
 
-		//Majority
-	    client.votes.set("VOTE_DATA", voteDataArray); 
-	    client.votes.set("VOTE_ORDER", voteOrderArray);
-		client.votes.set("MAJORITY", majority);
-		client.votes.set("PHASE", [phaseType, phaseNum]);
-		client.votes.set("HAMMER", false);
-		client.votes.set("DMLIST", []);
+		let logChannel = client.channels.cache.get(gameState.logChannelID);
+		let actionLogChannel = client.channels.cache.get(gameState.actionLogChannelID);
+		if (logChannel) {
+			let logChannelMessage = await logChannel.send(phaseLabel);
+			if (logChannelMessage) {
+				logChannelMessage.pin();
+			}
+		}
+		if (actionLogChannel) {
+			let actionLogChannelMessage = await actionLogChannel.send(phaseLabel);
+			if (actionLogChannelMessage) {
+				actionLogChannelMessage.pin();
+			}
+		}
+
+		Functions.SetGameState(client, message, gameState);
+		message.channel.send(returnMessage);
 	}
 };

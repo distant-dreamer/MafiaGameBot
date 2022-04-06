@@ -97,15 +97,20 @@ module.exports = {
 
     },
 
-    GetPlayerList(players) {
-        let aliveUsernames = players.filter(p => p.alive).map(p => p.username);
-        let deadUsernames = players.filter(p => !p.alive).map(p => p.username);
+    GetPlayerList(gameState) {
+        let aliveUsernames = gameState.players.filter(p => p.alive).map(p => p.username);
+        let deadUsernames = gameState.players.filter(p => !p.alive).map(p => p.username);
         aliveUsernames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
         deadUsernames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-        let majority = Math.ceil(aliveUsernames.length / 2.0) + (1 >> (aliveUsernames.length % 2));
+        let majority = gameState.majority;
         return `-------- **ALIVE: ${aliveUsernames.length}** --------\n${aliveUsernames.join("\n")}\n\n` +
             `-------- **DEAD: ${deadUsernames.length}** --------\n${deadUsernames.join("\n")}\n\n` +
             `**MAJORITY: ${majority}**`;
+    },
+
+    CalculateMajority(players) {
+        let alive = players.filter(p => p.alive);
+        return Math.ceil(alive.length / 2.0) + (1 >> (alive.length % 2));
     },
 
     async UpdatePlayerList(client, message, voteDataArray, deadUsernames) {

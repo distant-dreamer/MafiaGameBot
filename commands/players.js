@@ -1,4 +1,4 @@
-const { GetPlayerList } = require("../Functions");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'players', 
@@ -10,6 +10,6 @@ module.exports = {
 		if (!gameState.players.length) 
 			return message.channel.send("You don't have any players to see! Setup the game first with `!setup`.");
 
-		message.channel.send(GetPlayerList(gameState.players));
+		message.channel.send(Functions.GetPlayerList(gameState));
 	}
 };

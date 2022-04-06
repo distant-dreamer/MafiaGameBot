@@ -1,9 +1,12 @@
 
-
 class Gamestate {
     constructor(guildID) {
         this.players = [];
         this.guildID = guildID;
+        this.phase = undefined 
+        this.phaseType = undefined;
+        this.majority;
+        this.hammered = false;
         this.voteChannelID;
         this.actionLogChannelID;
         this.logChannelID;

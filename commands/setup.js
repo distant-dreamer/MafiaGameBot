@@ -1,9 +1,5 @@
-
-const Enmap = require("enmap");
 const { Player } = require("../Classes");
-const { prefix, token } = require('../config.json');
-const { ENMAP_DATABASE } = require("../Constants");
-const { GetStoredUserURL, GetPlayerList, SetGameState: SetGamestate } = require("../Functions");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'setup',
@@ -24,15 +20,15 @@ module.exports = {
 
 		let players = [];
 		for (let member of roleMembers) {
-			let avatarURL = await GetStoredUserURL(client, message, member.id);
+			let avatarURL = await Functions.GetStoredUserURL(client, message, member.id);
 			players.push(new Player(member.user.username, member.id, avatarURL));
 		}
 
-		let playerList = GetPlayerList(players);
-
 		gameState.players = players;
-		SetGamestate(client, message, gameState);
+		gameState.majority = Functions.CalculateMajority(gameState.players);
+		Functions.SetGameState(client, message, gameState);
 
-		message.channel.send(`Game setup for **${players.length}**.\n\n${playerList}`);
+		let playerList = Functions.GetPlayerList(gameState);
+		message.channel.send(`Game setup for **${players.length}** players.\n\n${playerList}`);
 	}
 };
