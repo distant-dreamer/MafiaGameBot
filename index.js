@@ -160,7 +160,27 @@ client.on('messageCreate', async message => {
 		client.votes.set("ACTIVITY_DATA", activity_array);
 	}
 
-	let isGM = (message.member && message.member.permissions.has('ADMINISTRATOR'));
+	let guildID;
+	if (message.guild)
+		guildID = message.guild.id;
+	if (!guildID) {
+		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
+		if (guildMap)
+			guildID = guildMap.get(message.author.id);
+		if (!guildID)
+			return message.channel.send(`I can't find you in any games! If this is a mistake, contact your GM.`);
+	}
+
+	let gameState = client.votes.get(guildID);
+	if (!gameState)
+		gameState = new Gamestate(guildID);
+
+	let isInGmList = gameState.gms.includes(message.author.id);
+	let isGM = isInGmList || (message.member && message.member.permissions.has('ADMINISTRATOR'));
+	if (isGM && !isInGmList) {
+		gameState.gms.push(message.author.id);
+		Functions.SetGameState(client, message, gameState);
+	}
 
 	if (isGM) {
 		if (message.content == "LOCK") {
@@ -196,25 +216,6 @@ client.on('messageCreate', async message => {
 		return message.channel.send(notGMMessage);
 	}
 
-	let guildID;
-	if (message.guild)
-		guildID = message.guild.id;
-	if (!guildID) {
-		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
-		if (guildMap)
-			guildID = guildMap.get(message.author.id);
-		if (!guildID)
-			return message.channel.send(`I can't find you in any games! If this is a mistake, contact your GM.`);
-	}
-
-	let gameState = client.votes.get(guildID);
-	if (!gameState)
-		gameState = new Gamestate(guildID);
-
-	if (isGM && !gameState.gms.includes(message.author.id)) {
-		gameState.gms.push(message.author.id);
-		Functions.SetGameState(client, message, gameState);
-	}
 
 	try {
 		command.execute(client, message, args, gameState);

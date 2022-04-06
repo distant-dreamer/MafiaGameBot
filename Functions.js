@@ -31,6 +31,19 @@ module.exports = {
         return player;
     },
 
+    GetMemberInGuildFromInput(message, guild, inputUsername) {
+        if (!inputUsername) {
+            message.channel.send("Please enter a user");
+            return null;
+        }
+        let member = guild.members.cache.find(m => m.user.username.toLowerCase().includes(inputUsername));
+        if (!member) {
+            message.channel.send(`No player found mathching input: **${inputUsername}**`);
+            return null;
+        }
+        return member;
+    },
+
     ConvertDiscordIDToUsername(message, players, inputDiscordID) {
         let player = players.find(p => p.discordID == inputDiscordID);
         if (player) return player.username;

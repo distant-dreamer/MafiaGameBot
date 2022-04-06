@@ -1,33 +1,23 @@
-
-const Enmap = require("enmap");
+const Functions = require("../Functions");
 
 module.exports = {
 	name: 'mod',
 	description: 'Gives a player control over the bot (use for joint moderation or a tech helper)',
 	notGMMessage: "I'll mod your ass.",
-	execute(client, message, args) {
+	execute(client, message, args, gameState) {
 
-		const gm = client.votes.get("GM");
+		if (!args.length) 
+			return message.channel.send("What? I need a user to add as a moderator.");
 
-		if (!args.length) {
-			return message.channel.send("What? I need a user id.")
-		}
+		let member = Functions.GetMemberInGuildFromInput(message, message.guild, args.shift()); 
+		if (!member) return;
 
-		let inputUser = args.shift();
+		if (gameState.gms.includes(member.id)) 
+			return message.channel.send(`${member.user.username} already has mod contorl.`);
 
-		let player = message.guild.members.cache.find(m => m.user.username.toLowerCase() == inputUser.toLowerCase());
-		if (!player)
-			return message.channel.send(`No player found mathching input: **${inputUser}** (it must be exact)`);
-
-		if (gm.includes(player.username)) {
-			message.channel.send(`${player.username} already has mod contorl.`);
-			return;
-		}
-
-		gm.push(player.id);
-		client.votes.set("GM", gm);
-		message.channel.send(player.user.username + " has been given moderation permissions.");
-		return;
-
+		gameState.gms.push(member.id);
+		Functions.SetGameState(client, message, gameState);
+		
+		message.channel.send(`**${member.user.username}** has been given moderation permissions. Use \`!unmod\` to revoke them.`);
 	}
 };

@@ -17,9 +17,8 @@ module.exports = {
 		let inputUsername = args.shift().toLowerCase();
 		let player = gameState.players.find(p => !p.alive && p.username.toLowerCase().includes(inputUsername));
 		if (!player) {
-			let member = message.guild.members.cache.find(m => m.user.username.toLowerCase().includes(inputUsername));
-			if (!member)
-				return message.channel.send(`No player found mathching input: **${inputUsername}**`);
+			let member = Functions.GetMemberInGuildFromInput(message, message.guild, inputUsername); 
+			if (!member) return;
 			if (gameState.players.some(p => p.discordID == member.id))
 				return message.channel.send(`**${member.user.username}** is already alive and in the game. I'm not adding them again!`);
 			let avatarURL = await Functions.GetStoredUserURL(client, message, member.id);
