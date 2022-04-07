@@ -63,7 +63,6 @@ module.exports = {
         }
     },
 
-    //Gets a stored URL of a player's avatar
     async GetStoredUserURL(client, message, discordID) {
 
         let isDM = message.channel.type == "DM";
@@ -101,7 +100,6 @@ module.exports = {
             return avatarInfo.reuploadedAvatarURL;
     },
 
-    //Reuploads an image of a player's avatar as a message so that discord is forced to keep it :)
     async UpdateStoredAvatarURL(client, message, user, username, avatars) {
 
         const discordAvatarURL = await user.displayAvatarURL({ format: `webp`, size: 512 });
@@ -178,6 +176,14 @@ module.exports = {
         }
 
         return voteDataString;
+    },
+
+    GetActions(gameState) {
+		let actionString = `__ACTIONS for ${gameState.phaseType} ${gameState.phase}__\n`;
+		for (let action of gameState.actions) {
+			actionString += `:small_orange_diamond: ${action.senderUsername}: \`${action.text}\``;
+		}
+        return actionString;
     },
 
     CalculateMajority(players) {

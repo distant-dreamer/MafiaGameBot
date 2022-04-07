@@ -46,12 +46,15 @@ module.exports = {
 			returnMessage += Functions.GetDms(gameState) + "\n\n";
 		if (gameState.votes.length)
 			returnMessage += Functions.GetVotes(message, gameState) + "\n\n";
+		if (gameState.actions.length)
+			returnMessage += Functions.GetActions(gameState) + "\n\n";
 
 		gameState.phase = inputPhase;
 		gameState.phaseType = inputPhaseType;
 		gameState.hammered = false;
 		gameState.votes = [];
 		gameState.dms = [];
+		gameState.actions = [];
 
 		let phaseLabel;
 

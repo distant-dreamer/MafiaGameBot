@@ -11,6 +11,7 @@ module.exports = {
 			message.channel.send(
 				"**!vote <player>** - votes for a player\
 				\n**!unvote** - unvotes for a player\
+				\n**!night X <your action>** - sends your action to the GM\
 				\n**DM the BOT** - sends a message to the secret vault. Both text and images accepted."
 			);
 			return;

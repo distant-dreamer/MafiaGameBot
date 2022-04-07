@@ -1,4 +1,5 @@
 const { Player } = require("../Classes");
+const { ENMAP_DATABASE } = require("../Constants");
 const Functions = require("../Functions");
 
 module.exports = {
@@ -27,6 +28,13 @@ module.exports = {
 		gameState.players = players;
 		gameState.majority = Functions.CalculateMajority(gameState.players);
 		Functions.SetGameState(client, message, gameState);
+
+		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
+		if (!guildMap)
+			guildMap = new Map();
+		for (let player of players) 
+			guildMap.set(player.discordID, gameState.guildID);
+		client.votes.set(ENMAP_DATABASE.GUILD_MAP, guildMap);
 
 		let playerList = Functions.GetPlayerList(gameState);
 		message.channel.send(`Game setup for **${players.length}** players.\n\n${playerList}`);
