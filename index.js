@@ -50,42 +50,61 @@ client.on('messageCreate', async message => {
 
 	if (message.author.bot) return; // Ignore bots.
 
+	let guildID;
+	if (message.guild)
+		guildID = message.guild.id;
+	if (!guildID) {
+		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
+		if (guildMap)
+			guildID = guildMap.get(message.author.id);
+		if (!guildID)
+			return message.channel.send(`I can't find you in any games! If this is a mistake, contact your GM.`);
+	}
+
+	let gameState = client.votes.get(guildID);
+	if (!gameState)
+		gameState = new Gamestate(guildID);
+
+	let isInGmList = gameState.gms.includes(message.author.id);
+	let isGM = isInGmList || (message.member && message.member.permissions.has('ADMINISTRATOR'));
+	if (isGM && !isInGmList) {
+		gameState.gms.push(message.author.id);
+		Functions.SetGameState(client, message, gameState);
+	}
+
 	if (message.channel.type === "DM" && !message.content.startsWith(prefix)) {
 
-		const vaultChannelID = client.votes.get("VAULT");//Get vault channel;
-		const guildID = client.votes.get("GUILD_ID");//Get Guild ID
+		if (!gameState.vaultChannelID)
+			return message.author.send("The GM needs to setup the vault channel.");
 
-		if (vaultChannelID && guildID) {
-			//Color and send message
-			let guild = client.guilds.cache.find(g => g.id == guildID);
-			let member = guild.members.cache.find(m => m.id == message.author.id);
-			let color;
-			if (member)
-				color = member.displayHexColor;
+		let guild = client.guilds.cache.find(g => g.id == guildID);
+		if (!guild)
+			return message.author.send("Error: Failed to find guild (Try again?)");
 
-			let avatar = await UtiltiyFunctions.GetStoredUserURL(client, message, member.user.id); 
-			//Put the message in a cute little embed
-			let embed = new Discord.MessageEmbed()
-				.setDescription(message.content)
-				.setColor(color)
-				.setAuthor({ name: message.author.username, iconURL: avatar })
+		let member = guild.members.cache.find(m => m.id == message.author.id);
+		if (!member)
+			return message.author.send("Error: Failed to find member (Try again?)");
 
-			//Add Image if it exists
-			if (message.attachments.size)
-				embed.setImage(message.attachments.first().url)
+		let color = member.displayHexColor;
+		let avatar = await UtiltiyFunctions.GetStoredUserURL(client, message, member.user.id);
+		let embed = new Discord.MessageEmbed()
+			.setDescription(message.content)
+			.setColor(color)
+			.setAuthor({ name: message.author.username, iconURL: avatar })
 
-			await client.channels.cache.get(vaultChannelID).send({ embeds: [embed] });
+		if (message.attachments.size)
+			embed.setImage(message.attachments.first().url)
 
-			let vaultMessage = await message.author.send("Sent to vault.");
-			await UtiltiyFunctions.sleep(5000);
-			vaultMessage.delete();
-		}
-		else {
-			message.author.send("The GM needs to setup the vault channel.");
-		}
+		let vaultChannel = client.channels.cache.get(gameState.vaultChannelID);
+		if (!vaultChannel)
+			return message.author.send("Error: Failed to find the vault channel. Tell the GM that they need to reset it.");
+
+		vaultChannel.send({ embeds: [embed] });
+		let vaultMessage = await message.author.send("Sent to vault.");
+		await UtiltiyFunctions.sleep(5000);
+		vaultMessage.delete();
 		return;
 	}
-	//if (message.author.role !== "God") return;
 
 	var jailCellChannelID = client.votes.get("JAIL_CELL");
 	var jailIntercomChannelID = client.votes.get("JAIL_INTERCOM");
@@ -160,27 +179,6 @@ client.on('messageCreate', async message => {
 		client.votes.set("ACTIVITY_DATA", activity_array);
 	}
 
-	let guildID;
-	if (message.guild)
-		guildID = message.guild.id;
-	if (!guildID) {
-		let guildMap = client.votes.get(ENMAP_DATABASE.GUILD_MAP);
-		if (guildMap)
-			guildID = guildMap.get(message.author.id);
-		if (!guildID)
-			return message.channel.send(`I can't find you in any games! If this is a mistake, contact your GM.`);
-	}
-
-	let gameState = client.votes.get(guildID);
-	if (!gameState)
-		gameState = new Gamestate(guildID);
-
-	let isInGmList = gameState.gms.includes(message.author.id);
-	let isGM = isInGmList || (message.member && message.member.permissions.has('ADMINISTRATOR'));
-	if (isGM && !isInGmList) {
-		gameState.gms.push(message.author.id);
-		Functions.SetGameState(client, message, gameState);
-	}
 
 	if (isGM) {
 		if (message.content == "LOCK") {

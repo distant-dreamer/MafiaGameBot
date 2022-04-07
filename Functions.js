@@ -333,7 +333,7 @@ module.exports = {
             }
         } else {
             if (!args.length)
-                return message.channel.send(`You gotta vote for somebody ${message.author}`);
+                return message.channel.send(`You gotta vote for somebody.`);
 
             votedPlayer = this.GetPlayerFromInput(message, args.shift(), gameState.players);
             if (!votedPlayer) return;

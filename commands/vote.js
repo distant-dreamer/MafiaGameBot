@@ -9,7 +9,6 @@ module.exports = {
     public: true,
     async execute(client, message, args, gameState) {
         Functions.PlaceVote(client, message, args, gameState);
-
     },
 };
 
