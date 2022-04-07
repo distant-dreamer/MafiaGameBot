@@ -3,18 +3,12 @@ const Enmap = require("enmap");
 
 module.exports = {
 	name: 'resetall',
-	description: 'Releases gm control',
+	description: 'Resets all data in the server.',
 	format: "!resetall",
 	notGMMessage: "Ha. Very funny. No.",
-	execute(client, message, args) {
+	execute(client, message, args, gameState) {
 
-		client.votes.fetchEverything();
-
-		const keys = client.votes.indexes;
-		for (i in keys) {
-			client.votes.set(keys[i], undefined);
-		}
-
+		client.votes.set(gameState.guildID, null);
 		message.channel.send("All data has been cleared.");
 	}
 };

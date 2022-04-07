@@ -55,7 +55,7 @@ module.exports = {
     },
 
     async Pin(message) {
-        if (!message || message.guild.id == 859208746127589396) return;
+        if (!message || !message.guild || message.guild.id == 859208746127589396) return;
         try {
             message.pin();
         } catch (error) {
@@ -303,6 +303,9 @@ module.exports = {
     async PlaceVote(client, message, args, gameState, { isUnvote = false } = {}) {
         if (!gameState.players.length)
             return message.channel.send("The GM needs to get their shit together and setup the game.");
+
+        if (message.channel.type == "DM")
+            return message.channel.send("This is *definitely* not the designated voting channel. Sneaky bastard.");
 
         if (!gameState.voteChannelID)
             return message.channel.send("The GM needs to set the voting channel!");
