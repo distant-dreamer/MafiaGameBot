@@ -106,33 +106,24 @@ client.on('messageCreate', async message => {
 		return;
 	}
 
-	var jailCellChannelID = client.votes.get("JAIL_CELL");
-	var jailIntercomChannelID = client.votes.get("JAIL_INTERCOM");
-
-	const gm = client.votes.get("GM");
-	if (gm && message.author.id != gm) { //ignore messeges from gm
-		//TO JAILOR
-		if (message.channel.id == jailCellChannelID) {
-			client.channels.cache.get(jailIntercomChannelID).send("**" + message.author.username + "**: " + message.content);
-			// let vaultMessage = await message.channel.send('Sent to ???.')
-			// await UtiltiyFunctions.sleep(1000);
-			// vaultMessage.delete();
-			return;
-		}
-
-		//TO JAILCELL
-		if (message.channel.id == jailIntercomChannelID) {
-			client.channels.cache.get(jailCellChannelID).send("**???:**  " + message.content);
-			// let vaultMessage = await message.channel.send('Sent to hidden room')
-			// await UtiltiyFunctions.sleep(1000);
-			// vaultMessage.delete();
-			return;
-		}
+	if (!isGM && message.channel.id == gameState.jailCellChannelID) {
+		if (!gameState.jailIntercomChannelID)
+			return message.channel.send("The GM needs to set the Jail Intercom.");
+		let jailIntercomChannel = client.channels.cache.get(gameState.jailIntercomChannelID);
+		if (!jailIntercomChannel)
+			return message.channel.send("Error: Failed to find the jail intercom channel.");
+		return jailIntercomChannel.send(`**${message.author.username}**: ${message.content}`);
+	}
+	if (!isGM && message.channel.id == gameState.jailIntercomChannelID) {
+		if (!gameState.jailCellChannelID)
+			return message.channel.send("The GM needs to set the Jail Cell.");
+		let jailCellChannel = client.channels.cache.get(gameState.jailCellChannelID);
+		if (!jailCellChannel)
+			return message.channel.send("Error: Failed to find the jail cell channel.");
+		return jailCellChannel.send(`**???**: ${message.content}`);
 	}
 
-
 	//CHARACTER COUNT
-
 
 	const votechannel = client.votes.get("VOTE_CHANNEL");
 	const phase = client.votes.get("PHASE");
