@@ -17,6 +17,8 @@ module.exports = {
 			return message.channel.send("You need to set the vote channel first with `!votechannel`");
 		if (!gameState.actionLogChannelID)
 			return message.channel.send("You need to set the action log channel first with `!actionlog`");
+		if (!gameState.playerListChannelID)
+			return message.channel.send("You need to send the player list first with `!sendplayerlist`.");
 
 		let inputPhaseType = args.shift();
 		if (inputPhaseType)

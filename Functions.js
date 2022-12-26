@@ -328,7 +328,7 @@ module.exports = {
             votedPlayer = gameState.players.find(p => p.discordID == vote.votedID);
             if (!votedPlayer) {
                 gameState.votes = gameState.votes.filter(v => v.voterID != message.author.id);
-                Functions.SetGameState(client, message, gameState);
+                this.SetGameState(client, message, gameState);
                 return message.channel.send(`...uh, I couldn't find whoever you voted for? Whatever, I'm removed your vote.`);
             }
         } else {

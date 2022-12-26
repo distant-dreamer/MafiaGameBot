@@ -21,22 +21,24 @@ module.exports = {
 		const { commands } = message.client;
 
 		if (!args.length) {
-			let returnString = '*Here is what you need to setup the bot:*\n' +
-				'**!setup <Mafia Role>** - sets up the game with all players with a "mafia player" role\n' +
-				'**!sendplayerlist <channelID>** - sends a playerlist that the bot will keep updated.\n' +
-				'**!votechannel <channelID>** - sets the main voting channel\n' +
-				'**!log <channelID>** - sets the log channel\n' +
-				'**!vault <channelID>** - sets the secret vault channel\n' +
-				'**!actionlog <channelID>** - sets where you get actions\n\n' +
-				'*Here is the minimum that you need to do to run a game:*\n' +
-				'__**BEGIN NIGHT PHASE:**__\n' +
-				'**!kill <player>** - removes a player from the playerlist\n' +
-				'**!newphase** - closes voting funtionality for the night\n\n' +
-				'__**BEGIN DAY PHASE:**__\n' +
-				'**!kill <player>** - removes a player from the playerlist\n' +
-				'**!newphase** - activates voting and clears the votes.\n\n' +
-				'**------ALL COMMANDS------**\n' +
-				commands.map(command => command.name).join(', ');
+			let returnString = '*Here is what you need to setup the bot:*' +
+				'\n:small_blue_diamond:**!setup <Mafia Role>** - sets up the game with all players with a "mafia player" role' +
+				'\n:small_blue_diamond:**!sendplayerlist <channelID>** - sends a playerlist that the bot will keep updated.' +
+				'\n:small_blue_diamond:**!votechannel <channelID>** - sets the main voting channel' +
+				'\n:small_blue_diamond:**!log <channelID>** - sets the log channel' +
+				'\n:small_blue_diamond:**!vault <channelID>** - sets the secret vault channel' +
+				'\n:small_blue_diamond:**!actionlog <channelID>** - sets where you get actions' +
+				'\n\n*Here is the minimum that you need to do to run a game:*' +
+				'\n:last_quarter_moon_with_face:__**BEGIN NIGHT PHASE:**__:first_quarter_moon_with_face:' +
+				'\n**!actions** - looks at the actions sent in for that night' +
+				'\n**!kill <player>** - removes a player from the playerlist' +
+				'\n**!newphase** - closes voting funtionality for the night' +
+				'\n\n☀__**BEGIN DAY PHASE:**__☀' +
+				'\n**!kill <player>** - removes a player from the playerlist' +
+				'\n**!newphase** - activates voting and clears the votes.' +
+				'\n\n**------ALL COMMANDS------**\n' +
+				commands.map(command => command.name).join(', ') +
+				'\n\n*To learn more about a command, send `!help <command>`*';
 			return message.channel.send(returnString);
 		}
 

@@ -138,13 +138,13 @@ client.on('messageCreate', async message => {
 
 		var updateflag = false;
 		//Look up phase and player and add to it.
-		for (i in activity_array) {
+		for (let i in activity_array) {
 			//Find phase
 			if (phase[0] == activity_array[i][0][0] && phase[1] == activity_array[i][0][1]) {
 
 				//Find player
 				if (activity_array[i][1].length > 0) {
-					for (j in activity_array[i][1]) {
+					for (let j in activity_array[i][1]) {
 						if (message.author.username == activity_array[i][1][j][0]) {
 							//Update Value
 							activity_array[i][1][j][1] += message.content.length;
