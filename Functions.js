@@ -102,7 +102,7 @@ module.exports = {
             avatars.push({
                 userDiscordID: user.id,
                 avatarID: user.avatar,
-                reuploadedAvatarURL: result 
+                reuploadedAvatarURL: result
             });
             client.votes.set("AVATARS", avatars);
         }
@@ -110,7 +110,7 @@ module.exports = {
         return result;
     },
 
-    async GetVoteEmbed(client, message, gameState, votedPlayer, descriptionText, { isVoted = true, isLogChannel = false } = {}) {
+    async GetVoteEmbed(client, message, gameState, votedPlayer, descriptionText, { isUnvote = false, isLogChannel = false } = {}) {
         let votedPlayerMember = message.guild.members.cache.find(m => m.id === votedPlayer.discordID);
         let color = 0xFFFFFF;
         let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
@@ -118,18 +118,26 @@ module.exports = {
         votedAvatar = await this.GetStoredUserURL(client, message, message.guild, votedPlayerMember.user.id);
         let voterAvatar = await this.GetStoredUserURL(client, message, message.guild, message.author.id);
         color = votedPlayerMember.displayHexColor;
-        // votedAvatar = votedPlayerMember.user.avatarURL();
-        let label = (isVoted) ?
-            `${message.author.username} voted for ${votedPlayer.username}` :
-            `❌ ${message.author.username} took away their vote on ${votedPlayer.username}`;
+
+        let label = (isUnvote)
+            ? `❌ ${message.author.username} took away their vote on ${votedPlayer.username}`
+            : `${message.author.username} voted for ${votedPlayer.username}`;
 
         let url = (isLogChannel) ? message.url : gameState.playerListMessageURL;
 
-        return new Discord.MessageEmbed()
+        if (isLogChannel) {
+            votedAvatar += `?width=22&height=22`;
+        }
+
+        let embed = new Discord.MessageEmbed()
             .setAuthor({ name: label, iconURL: voterAvatar, url: url })
             .setColor(color)
             .setThumbnail(votedAvatar)
-            .setTitle("-----VOTES (" + gameState.votes.length + ")-----\n" + descriptionText)
+
+        if (!isLogChannel)
+            embed.setTitle("-----VOTES (" + gameState.votes.length + ")-----\n" + descriptionText)
+
+        return embed;
     },
 
     GetPlayerList(gameState) {
@@ -350,10 +358,8 @@ module.exports = {
         if (!isUnvote)
             gameState.votes.push(vote);
 
-        let voteEmbedVoteChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, voteListString,
-            { isUnvote: isUnvote });
-        let voteEmbedLogChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, voteListString,
-            { isUnvote: isUnvote, isLogChannel: true });
+        let voteEmbedVoteChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, voteListString, { isUnvote: isUnvote });
+        let voteEmbedLogChannel = await this.GetVoteEmbed(client, message, gameState, votedPlayer, "", { isUnvote: isUnvote, isLogChannel: true });
 
         let logChannel = client.channels.cache.get(gameState.logChannelID);
         if (logChannel)
