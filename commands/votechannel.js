@@ -4,7 +4,10 @@ module.exports = {
 	description: 'Sets the voting channel',
 	format: "!votechannel <channelid>",
 	notGMMessage: "You leave the designated voting channel alone.",
-	execute(client, message, args, gameState) {
+	async execute(client, message, args, gameState) {
+
+		if (await Functions.CheckIfChannelVisible(message)) return;
+
 		Functions.SetGameChannel(client, message, args, gameState, this.name);
 	}
 };

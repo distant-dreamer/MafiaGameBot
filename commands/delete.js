@@ -13,6 +13,8 @@ module.exports = {
 		if (!gameState.players.length) 
 			return message.channel.send("There's nobody left to delete.\n\nYou monster...");
 
+		if (await Functions.CheckIfChannelVisible(message)) return;
+
 		if (!args.length)
 			return message.channel.send("Please include a player to delete from the game.");
 

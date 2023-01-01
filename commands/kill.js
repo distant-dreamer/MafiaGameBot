@@ -13,6 +13,8 @@ module.exports = {
 		if (!gameState.players.length) 
 			return message.channel.send("Kill? Kill who? You have no players!");
 
+		if (await Functions.CheckIfChannelVisible(message)) return;
+
 		if (!args.length)
 			return message.channel.send("Please include a player to kill.");
 

@@ -50,6 +50,9 @@ client.on('messageCreate', async message => {
 
 	if (message.author.bot) return; // Ignore bots.
 
+	if (message.content == "test") {
+	}
+
 	let guildID;
 	if (message.guild)
 		guildID = message.guild.id;

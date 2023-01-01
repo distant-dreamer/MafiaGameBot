@@ -1,5 +1,6 @@
 const { PHASE_TYPE } = require("../Constants");
 const Functions = require("../Functions");
+const Discord = require('discord.js');
 
 module.exports = {
 	name: 'newphase',
@@ -19,6 +20,8 @@ module.exports = {
 			return message.channel.send("You need to set the action log channel first with `!actionlog`");
 		if (!gameState.playerListChannelID)
 			return message.channel.send("You need to send the player list first with `!sendplayerlist`.");
+
+		if (await Functions.CheckIfChannelVisible(message)) return;
 
 		let inputPhaseType = args.shift();
 		if (inputPhaseType)

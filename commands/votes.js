@@ -5,7 +5,10 @@ module.exports = {
 	format: "!votes",
 	notGMMessage: "You don't get to have that **DATA**.",
 	aliases: ["votedata"],
-	execute(client, message, args, gameState) {
+	async execute(client, message, args, gameState) {
+
+		if (await Functions.CheckIfChannelVisible(message)) return;
+		
 		message.channel.send(Functions.GetVotes(message, gameState));
 	}
 };

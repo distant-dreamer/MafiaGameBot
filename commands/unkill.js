@@ -11,6 +11,8 @@ module.exports = {
 	notGMMessage: "You do not have the power over life and death, simpleton.",
 	async execute(client, message, args, gameState) {
 
+		if (await Functions.CheckIfChannelVisible(message)) return;
+
 		if (!args.length)
 			return message.channel.send("Please include a player to bring to life. It can be anyone in the server.");
 

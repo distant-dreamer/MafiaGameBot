@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const Discord = require('discord.js');
-const { PHASE_TYPE } = require("./Constants");
+const { PHASE_TYPE, YES_INPUTS, NO_INPUTS } = require("./Constants");
 const { Vote } = require("./Classes");
 
 module.exports = {
@@ -71,6 +71,9 @@ module.exports = {
             avatars = [];
         let avatarInfo = avatars.find(a => a.userDiscordID == discordID);
         let user = client.users.cache.get(discordID);
+
+        return message.author.defaultAvatarURL;
+
         if (!user)
             return message.author.defaultAvatarURL;
 
@@ -390,6 +393,59 @@ module.exports = {
             }
         }
         this.SetGameState(client, message, gameState);
-    }
+    },
+
+    async CheckIfChannelVisible(message)
+    {
+        let result = false;
+
+		let permissionsOfChannel = message.channel.permissionsFor(message.guild.id);
+		if (permissionsOfChannel.has(Discord.Permissions.FLAGS.VIEW_CHANNEL))
+        {
+			message.channel.send("I'm not leaker, so no, fuck off. This command shows sensitive info and everyone can see this channel!");
+            result = true;
+        }
+
+        return result;
+    },
+
+    async WarnUserWithPrompt(message, promptText,
+        { cancelMessage = "Ok, canceled.", noEmoji = false } = {}) {
+
+        if (promptText.length > 0 && promptText[0] != ":" && !noEmoji)
+            promptText = ":warning::grey_question: " + promptText;
+
+        let replyMessage = await this.GetInputFromUser(message.client, message, promptText, { returnMessage: true });
+        if (!replyMessage) return false;
+
+        let input = replyMessage.content.toLowerCase();
+        if (YES_INPUTS.includes(input))
+            return true;
+
+        if (NO_INPUTS.includes(input))
+            message.channel.send(message, cancelMessage);
+        else
+            replyMessage.react("❓");
+
+        return false;
+    },
+
+    async GetInputFromUser(client, message, promptMessage, { timeout = 60000, returnMessage = false } = {}) {
+        if (promptMessage.length)
+            await message.channel.send(message, promptMessage);
+
+        let filter = m => !m.author.bot && (m.author.id == message.author.id);
+        let inputMessage = await message.channel.awaitMessages({ filter, max: 1, time: timeout });
+
+        inputMessage = inputMessage.first();
+        if (!inputMessage || !inputMessage.content) {
+            message.channel.send(`:clock1: ...hello? You still there? *(Confirmation aborted after timeout of ${timeout * 0.001} seconds)*`);
+            return null;
+        }
+
+        if (returnMessage) return inputMessage;
+
+        return inputMessage.content;
+    },
 
 }
