@@ -23,7 +23,7 @@ module.exports = {
 			if (!member) return;
 			if (gameState.players.some(p => p.discordID == member.id))
 				return message.channel.send(`**${member.user.username}** is already alive and in the game. I'm not adding them again!`);
-			let avatarURL = await Functions.GetStoredUserURL(client, message, member.id);
+			let avatarURL = await Functions.GetStoredUserURL(client, message, message.guild, member.id);
 			player = new Player(member.user.username, member.id, avatarURL);
 			gameState.players.push(player);
 		}

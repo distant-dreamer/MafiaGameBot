@@ -89,7 +89,7 @@ client.on('messageCreate', async message => {
 			return message.author.send("Error: Failed to find member (Try again?)");
 
 		let color = member.displayHexColor;
-		let avatar = await UtiltiyFunctions.GetStoredUserURL(client, message, member.user.id);
+		let avatar = await UtiltiyFunctions.GetStoredUserURL(client, message, guild, member.user.id);
 		let embed = new Discord.MessageEmbed()
 			.setDescription(message.content)
 			.setColor(color)

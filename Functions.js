@@ -63,64 +63,51 @@ module.exports = {
         }
     },
 
-    async GetStoredUserURL(client, message, discordID) {
+    async GetStoredUserURL(client, message, guild, discordID) {
 
-        let isDM = message.channel.type == "DM";
+        let result = message.author.defaultAvatarURL;
+
         let avatars = client.votes.get("AVATARS");
         if (!avatars)
             avatars = [];
-        let avatarInfo = avatars.find(a => a.userDiscordID == discordID);
+
         let user = client.users.cache.get(discordID);
+        let guildUser = guild.members.cache.get(discordID);
 
-        return message.author.defaultAvatarURL;
+        let avatarInfos = avatars.filter(a => a.userDiscordID == discordID);
+        let matchingAvatarInfo;
+        if (guildUser)
+            matchingAvatarInfo = avatarInfos.find(a => a.avatarID == guildUser.avatar);
 
-        if (!user)
-            return message.author.defaultAvatarURL;
+        if (!matchingAvatarInfo && user)
+            matchingAvatarInfo = avatarInfos.find(a => a.avatarID == user.avatar);
 
-        if (isDM) {
-            //Don't check for an updated avatar if we're in DM.
-            //The stored avatar might be a guild avatar, which won't match
-            if (avatarInfo) return avatarInfo.reuploadedAvatarURL;
+        if (matchingAvatarInfo)
+            result = matchingAvatarInfo.reuploadedAvatarURL;
 
-            //If nothing is stored, then store the global avatar
-            return await this.UpdateStoredAvatarURL(client, message, user, user.username, avatars);
-        }
+        if (!matchingAvatarInfo) {
 
-        let guildUser = message.guild.members.cache.get(discordID);
-
-        if (!avatarInfo) {
+            let userForSavedAvatar = user;
             if (guildUser && guildUser.avatar)
-                return await this.UpdateStoredAvatarURL(client, message, guildUser, user.username, avatars);
-            else
-                return await this.UpdateStoredAvatarURL(client, message, user, user.username, avatars);
+                userForSavedAvatar = guildUser;
+
+            let discordAvatarURL = await user.displayAvatarURL({ format: `webp`, size: 512 });
+            let response = await fetch(discordAvatarURL);
+            let arrayBuffer = await response.arrayBuffer();
+            let buffer = Buffer.from(arrayBuffer);
+            let attachment = new Discord.MessageAttachment(buffer);
+            let avatarMessage = await message.channel.send({ content: `:desktop: NEW AVATAR FOR: ${message.author.username}`, files: [attachment] });
+            result = [...avatarMessage.attachments.values()][0].proxyURL;
+
+            avatars.push({
+                userDiscordID: user.id,
+                avatarID: user.avatar,
+                reuploadedAvatarURL: result 
+            });
+            client.votes.set("AVATARS", avatars);
         }
 
-        if (guildUser && guildUser.avatar && avatarInfo.avatarID != guildUser.avatar)
-            return await this.UpdateStoredAvatarURL(client, message, guildUser, user.username, avatars);
-        else if (guildUser && !guildUser.avatar && avatarInfo.avatarID != user.avatar)
-            return await this.UpdateStoredAvatarURL(client, message, user, user.username, avatars);
-        else
-            return avatarInfo.reuploadedAvatarURL;
-    },
-
-    async UpdateStoredAvatarURL(client, message, user, username, avatars) {
-
-        const discordAvatarURL = await user.displayAvatarURL({ format: `webp`, size: 512 });
-        const response = await fetch(discordAvatarURL);
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const attachment = new Discord.MessageAttachment(buffer);
-        const avatarMessage = await message.channel.send({ content: `:desktop: NEW AVATAR FOR: ${username}`, files: [attachment] });
-        const newURL = [...avatarMessage.attachments.values()][0].proxyURL;
-
-        avatars.push({
-            userDiscordID: user.id,
-            avatarID: user.avatar,
-            reuploadedAvatarURL: newURL
-        });
-        client.votes.set("AVATARS", avatars);
-
-        return newURL;
+        return result;
     },
 
     async GetVoteEmbed(client, message, gameState, votedPlayer, descriptionText, { isVoted = true, isLogChannel = false } = {}) {
@@ -128,10 +115,10 @@ module.exports = {
         let color = 0xFFFFFF;
         let votedAvatar = "http://www.clker.com/cliparts/e/0/f/4/12428125621652493290X_mark_18x18_02.svg.med.png";
 
-        votedAvatar = await this.GetStoredUserURL(client, message, votedPlayerMember.user.id);
-        let voterAvatar = await this.GetStoredUserURL(client, message, message.author.id);
+        votedAvatar = await this.GetStoredUserURL(client, message, message.guild, votedPlayerMember.user.id);
+        let voterAvatar = await this.GetStoredUserURL(client, message, message.guild, message.author.id);
         color = votedPlayerMember.displayHexColor;
-        votedAvatar = votedPlayerMember.user.avatarURL();
+        // votedAvatar = votedPlayerMember.user.avatarURL();
         let label = (isVoted) ?
             `${message.author.username} voted for ${votedPlayer.username}` :
             `❌ ${message.author.username} took away their vote on ${votedPlayer.username}`;
@@ -182,10 +169,10 @@ module.exports = {
     },
 
     GetActions(gameState) {
-		let actionString = `__ACTIONS for ${gameState.phaseType} ${gameState.phase}__\n`;
-		for (let action of gameState.actions) {
-			actionString += `:small_orange_diamond: ${action.senderUsername}: \`${action.text}\``;
-		}
+        let actionString = `__ACTIONS for ${gameState.phaseType} ${gameState.phase}__\n`;
+        for (let action of gameState.actions) {
+            actionString += `:small_orange_diamond: ${action.senderUsername}: \`${action.text}\``;
+        }
         return actionString;
     },
 
@@ -304,11 +291,12 @@ module.exports = {
     },
 
     async PlaceVote(client, message, args, gameState, { isUnvote = false } = {}) {
-        if (!gameState.players.length)
-            return message.channel.send("The GM needs to get their shit together and setup the game.");
 
         if (message.channel.type == "DM")
             return message.channel.send("This is *definitely* not the designated voting channel. Sneaky bastard.");
+
+        if (!gameState.players.length)
+            return message.channel.send("The GM needs to get their shit together and setup the game.");
 
         if (!gameState.voteChannelID)
             return message.channel.send("The GM needs to set the voting channel!");
@@ -395,14 +383,12 @@ module.exports = {
         this.SetGameState(client, message, gameState);
     },
 
-    async CheckIfChannelVisible(message)
-    {
+    async CheckIfChannelVisible(message) {
         let result = false;
 
-		let permissionsOfChannel = message.channel.permissionsFor(message.guild.id);
-		if (permissionsOfChannel.has(Discord.Permissions.FLAGS.VIEW_CHANNEL))
-        {
-			message.channel.send("I'm not leaker, so no, fuck off. This command shows sensitive info and everyone can see this channel!");
+        let permissionsOfChannel = message.channel.permissionsFor(message.guild.id);
+        if (permissionsOfChannel.has(Discord.Permissions.FLAGS.VIEW_CHANNEL)) {
+            message.channel.send("I'm not leaker, so no, fuck off. This command shows sensitive info and everyone can see this channel!");
             result = true;
         }
 

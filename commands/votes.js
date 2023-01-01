@@ -8,7 +8,7 @@ module.exports = {
 	async execute(client, message, args, gameState) {
 
 		if (await Functions.CheckIfChannelVisible(message)) return;
-		
+
 		message.channel.send(Functions.GetVotes(message, gameState));
 	}
 };

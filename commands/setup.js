@@ -21,7 +21,7 @@ module.exports = {
 
 		let players = [];
 		for (let member of roleMembers) {
-			let avatarURL = await Functions.GetStoredUserURL(client, message, member.id);
+			let avatarURL = await Functions.GetStoredUserURL(client, message, message.guild, member.id);
 			players.push(new Player(member.user.username, member.id, avatarURL));
 		}
 

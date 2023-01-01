@@ -6,8 +6,6 @@ module.exports = {
 	notGMMessage: "You leave the designated voting channel alone.",
 	async execute(client, message, args, gameState) {
 
-		if (await Functions.CheckIfChannelVisible(message)) return;
-
 		Functions.SetGameChannel(client, message, args, gameState, this.name);
 	}
 };
