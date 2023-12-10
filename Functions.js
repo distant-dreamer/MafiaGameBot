@@ -189,7 +189,7 @@ module.exports = {
         let actionString = `__ACTIONS for ${gameState.phaseType} ${gameState.phase}__\n`;
         for (let action of gameState.actions) {
             let truncatedAction = this.TruncateString(action.text, 200);
-            actionString += `:small_orange_diamond: ${action.senderUsername}: \`${truncatedAction}\``;
+            actionString += `:small_orange_diamond: ${action.senderUsername}: \`${truncatedAction}\`\n`;
         }
         return actionString;
     },
