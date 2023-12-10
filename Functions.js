@@ -176,10 +176,21 @@ module.exports = {
         return voteDataString;
     },
 
+    TruncateString(s, limit = 50) {
+        if (!s || s.length <= limit) return s;
+        if (s.length > limit) {
+            s = s.slice(0, limit - 3);
+            s = Discord.escapeMarkdown(s);
+            s += "...";
+        }
+        return s;
+    },
+
     GetActions(gameState) {
         let actionString = `__ACTIONS for ${gameState.phaseType} ${gameState.phase}__\n`;
         for (let action of gameState.actions) {
-            actionString += `:small_orange_diamond: ${action.senderUsername}: \`${action.text}\``;
+            let truncatedAction = this.TruncateString(action.text, 200);
+            actionString += `:small_orange_diamond: ${action.senderUsername}: \`${truncatedAction}\``;
         }
         return actionString;
     },
