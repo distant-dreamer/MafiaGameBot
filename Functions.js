@@ -180,7 +180,6 @@ module.exports = {
         if (!s || s.length <= limit) return s;
         if (s.length > limit) {
             s = s.slice(0, limit - 3);
-            s = Discord.escapeMarkdown(s);
             s += "...";
         }
         return s;
