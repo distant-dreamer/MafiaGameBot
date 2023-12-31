@@ -1,21 +1,21 @@
-const fs = require('fs');
+const fs = require('node:fs');
+const path = require('node:path');
 const Discord = require('discord.js');
-const { Client, Intents } = require('discord.js');
+const { Client, Collection, Events, Intents } = require('discord.js');
 const Attachment = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { token } = require('./config.json');
 
-const myIntents = new Discord.Intents();
+const myIntents = new Intents();
 myIntents.add(
 	Intents.FLAGS.GUILDS,
 	Intents.FLAGS.GUILD_MEMBERS,
 	Intents.FLAGS.GUILD_PRESENCES,
 	Intents.FLAGS.GUILD_MESSAGES,
-	Intents.FLAGS.DIRECT_MESSAGES
-);
+	Intents.FLAGS.DIRECT_MESSAGES);
 
-let client = new Client({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL'] });
+const client = new Client({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL'] });
 
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
 //Enmap
 const Enmap = require("enmap");
@@ -42,7 +42,7 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', () => {
-	console.log('It\'s time to get sus!');
+	console.log(`Ready! Logged in as ${client.user.tag}`);
 });
 
 client.on('messageCreate', async message => {

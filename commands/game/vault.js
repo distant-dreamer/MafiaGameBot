@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
 	name: 'vault',
 	description: 'Sets the secretvault channel',

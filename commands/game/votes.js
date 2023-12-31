@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
 	name: 'votes', 
 	description: 'Displays all votes for this phase.',

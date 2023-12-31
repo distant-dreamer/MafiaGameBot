@@ -1,6 +1,6 @@
-const Functions = require("../Functions");
-const { PHASE_TYPE } = require("../Constants");
-const { Vote } = require("../Classes");
+const Functions = require("../../Functions");
+const { PHASE_TYPE } = require("../../Constants");
+const { Vote } = require("../../Classes");
 
 module.exports = {
     name: 'vote',

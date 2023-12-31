@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
 	name: 'jailcell',
 	description: 'Sets the jail cell channel, where a jailed player can speak to an anonymous jailor. GMs are ignored in jail channels.',

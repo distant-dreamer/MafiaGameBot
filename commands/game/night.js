@@ -1,5 +1,5 @@
-const { Action } = require("../Classes");
-const Functions = require("../Functions");
+const { Action } = require("../../Classes");
+const Functions = require("../../Functions");
 
 module.exports = {
 	name: 'night',

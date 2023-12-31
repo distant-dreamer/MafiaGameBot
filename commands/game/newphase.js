@@ -1,5 +1,5 @@
-const { PHASE_TYPE } = require("../Constants");
-const Functions = require("../Functions");
+const { PHASE_TYPE } = require("../../Constants");
+const Functions = require("../../Functions");
 const Discord = require('discord.js');
 
 module.exports = {

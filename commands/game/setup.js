@@ -1,6 +1,6 @@
-const { Player } = require("../Classes");
-const { ENMAP_DATABASE } = require("../Constants");
-const Functions = require("../Functions");
+const { Player } = require("../../Classes");
+const { ENMAP_DATABASE } = require("../../Constants");
+const Functions = require("../../Functions");
 
 module.exports = {
 	name: 'setup',

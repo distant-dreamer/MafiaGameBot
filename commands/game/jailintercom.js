@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
 	name: 'jailintercom',
 	description: 'Sets the jail intercom channel, where a jailor can speak to a jailed player anonymously. GMs are ignored in jail channels.',

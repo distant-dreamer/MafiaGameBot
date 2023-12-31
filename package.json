@@ -1,15 +1,16 @@
 {
-  "name": "ahmaykmafiabot",
+  "name": "discordmafiabot",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon /index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^13.6.0",
-    "enmap": "^5.8.8"
+    "discord.js": "^13.17.1",
+    "enmap": "^5.8.8",
+    "nodemon": "^3.0.2"
   },
   "devDependencies": {
     "eslint": "^8.56.0"

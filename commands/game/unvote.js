@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
     name: 'unvote',
     description: 'Removes your vote from player',

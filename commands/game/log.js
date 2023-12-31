@@ -1,4 +1,4 @@
-const Functions = require("../Functions");
+const Functions = require("../../Functions");
 module.exports = {
 	name: 'log',
 	description: 'Sets the log channel',

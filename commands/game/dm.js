@@ -1,8 +1,8 @@
 
 const Enmap = require("enmap");
-const { Dm } = require("../Classes");
-const { prefix, token } = require('../config.json');
-const Functions = require("../Functions");
+const { Dm } = require("../../Classes");
+const { prefix, token } = require('../../config.json');
+const Functions = require("../../Functions");
 
 module.exports = {
 	name: 'dm',
