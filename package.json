@@ -1,7 +1,6 @@
 {
   "name": "ahmaykmafiabot",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +10,18 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "enmap": "^5.8.8"
-  }
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/distant-dreamer/MafiaGameBot.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/distant-dreamer/MafiaGameBot/issues"
+  },
+  "homepage": "https://github.com/distant-dreamer/MafiaGameBot#readme",
+  "description": ""
 }
